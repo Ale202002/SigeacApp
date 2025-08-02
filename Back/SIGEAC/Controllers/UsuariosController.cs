@@ -47,5 +47,41 @@ namespace SIGEAC.Controllers
                 nuevoUsuario.Rol
             });
         }
+
+        [HttpPut("modificar/{id}")]
+        public async Task<IActionResult> ModificarUsuario(int id, [FromBody] UsuarioUpdate usuarioUpdate)
+        {
+            var usuario = await _context.Usuarios.FindAsync(id);
+            if (usuario == null)
+            {
+                return NotFound($"No se encontró el usuario con ID {id}");
+            }
+
+            // Verificar si el nuevo email ya existe (y no es del mismo usuario)
+            if (!string.Equals(usuario.Email, usuarioUpdate.Email, StringComparison.OrdinalIgnoreCase))
+            {
+                var emailEnUso = await _context.Usuarios.AnyAsync(u => u.Email == usuarioUpdate.Email);
+                if (emailEnUso)
+                {
+                    return Conflict("El email ya está en uso por otro usuario.");
+                }
+            }
+
+            // Actualizar campos permitidos
+            usuario.Nombre = usuarioUpdate.Nombre;
+            usuario.Email = usuarioUpdate.Email;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new
+            {
+                usuario.ID_Usuario,
+                usuario.Nombre,
+                usuario.Email,
+                usuario.Rol
+            });
+        }
+
+
     }
 }
