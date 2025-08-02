@@ -1,0 +1,6 @@
+@SIGEAC_HostAddress = http://localhost:5290
+
+GET {{SIGEAC_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
