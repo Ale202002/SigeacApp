@@ -19,7 +19,6 @@ namespace SIGEAC.Controllers
         [HttpPost("crear")]
         public async Task<IActionResult> CrearEmpleado([FromBody] EmpleadoCreate request)
         {
-            // Validar si el usuario existe
             var usuario = await _context.Usuarios.FindAsync(request.UsuarioId);
             if (usuario == null)
             {
@@ -37,22 +36,65 @@ namespace SIGEAC.Controllers
             _context.Empleados.Add(nuevoEmpleado);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(CrearEmpleado), new { id = nuevoEmpleado.ID_Empleado }, nuevoEmpleado);
+            return CreatedAtAction(nameof(CrearEmpleado), new { id = nuevoEmpleado.ID_Empleado }, new
+            {
+                nuevoEmpleado.ID_Empleado,
+                nuevoEmpleado.NombreCompleto,
+                nuevoEmpleado.DNI,
+                nuevoEmpleado.CorreoElectronico,
+                nuevoEmpleado.UsuarioId
+            });
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> ActualizarEmpleado(int id, [FromBody] EmpleadoUpdate request)
+        [HttpPut("modificar/{id}")]
+        public async Task<IActionResult> ModificarEmpleado(int id, [FromBody] EmpleadoUpdate request)
         {
             var empleado = await _context.Empleados.FindAsync(id);
             if (empleado == null)
-                return NotFound();
+            {
+                return NotFound($"No se encontró el empleado con ID {id}");
+            }
+
+            if (!string.Equals(empleado.CorreoElectronico, request.CorreoElectronico, StringComparison.OrdinalIgnoreCase))
+            {
+                var correoEnUso = await _context.Empleados.AnyAsync(e =>
+                    e.CorreoElectronico == request.CorreoElectronico && e.ID_Empleado != id);
+
+                if (correoEnUso)
+                {
+                    return Conflict("El correo electrónico ya está en uso por otro empleado.");
+                }
+            }
 
             empleado.NombreCompleto = request.NombreCompleto;
             empleado.DNI = request.DNI;
             empleado.CorreoElectronico = request.CorreoElectronico;
 
             await _context.SaveChangesAsync();
-            return NoContent();
+
+            return Ok(new
+            {
+                empleado.ID_Empleado,
+                empleado.NombreCompleto,
+                empleado.DNI,
+                empleado.CorreoElectronico,
+                empleado.UsuarioId
+            });
+        }
+
+        [HttpDelete("eliminar/{id}")]
+        public async Task<IActionResult> EliminarEmpleado(int id)
+        {
+            var empleado = await _context.Empleados.FindAsync(id);
+            if (empleado == null)
+            {
+                return NotFound($"No se encontró el empleado con ID {id}");
+            }
+
+            _context.Empleados.Remove(empleado);
+            await _context.SaveChangesAsync();
+
+            return Ok($"Empleado con ID {id} eliminado correctamente.");
         }
     }
 }
