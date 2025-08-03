@@ -1,0 +1,35 @@
+# Archivos de compilación
+bin/
+obj/
+*.dll
+*.exe
+*.pdb
+
+# Configuración de usuario
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Archivos de VS
+.vscode/
+.vs/
+
+# Archivos temporales
+*.log
+*.tmp
+
+# Archivos de paquetes NuGet
+packages/
+*.nupkg
+
+# Archivos de configuración de build
+*.cache
+*.dbmdl
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos de entorno
+.env
