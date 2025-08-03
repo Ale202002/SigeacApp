@@ -39,5 +39,20 @@ namespace SIGEAC.Controllers
 
             return CreatedAtAction(nameof(CrearEmpleado), new { id = nuevoEmpleado.ID_Empleado }, nuevoEmpleado);
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> ActualizarEmpleado(int id, [FromBody] EmpleadoUpdate request)
+        {
+            var empleado = await _context.Empleados.FindAsync(id);
+            if (empleado == null)
+                return NotFound();
+
+            empleado.NombreCompleto = request.NombreCompleto;
+            empleado.DNI = request.DNI;
+            empleado.CorreoElectronico = request.CorreoElectronico;
+
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
     }
 }
