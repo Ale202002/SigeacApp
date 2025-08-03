@@ -82,6 +82,20 @@ namespace SIGEAC.Controllers
             });
         }
 
+        [HttpDelete("eliminar/{id}")]
+        public async Task<IActionResult> EliminarUsuario(int id)
+        {
+            var usuario = await _context.Usuarios.FindAsync(id);
+            if (usuario == null)
+            {
+                return NotFound($"No se encontró el usuario con ID {id}");
+            }
+
+            _context.Usuarios.Remove(usuario);
+            await _context.SaveChangesAsync();
+
+            return Ok($"Usuario con ID {id} eliminado correctamente.");
+        }
 
     }
 }
