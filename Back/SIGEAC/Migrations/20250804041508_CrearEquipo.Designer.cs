@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SIGEAC.Data;
 
@@ -10,9 +11,11 @@ using SIGEAC.Data;
 namespace SIGEAC.Migrations
 {
     [DbContext(typeof(SigeacDbContext))]
-    partial class SigeacDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250804041508_CrearEquipo")]
+    partial class CrearEquipo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,62 +52,6 @@ namespace SIGEAC.Migrations
                     b.HasIndex("UsuarioId");
 
                     b.ToTable("Empleados");
-                });
-
-            modelBuilder.Entity("SIGEAC.Models.Equipo", b =>
-                {
-                    b.Property<int>("ID_Equipo")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID_Equipo"));
-
-                    b.Property<string>("Estado")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Nombre")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Tipo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ID_Equipo");
-
-                    b.ToTable("Equipos");
-                });
-
-            modelBuilder.Entity("SIGEAC.Models.Puesto", b =>
-                {
-                    b.Property<int>("ID_Puesto")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID_Puesto"));
-
-                    b.Property<int?>("EmpleadoID")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("EquipoID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Estado")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Ubicacion")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ID_Puesto");
-
-                    b.HasIndex("EmpleadoID");
-
-                    b.HasIndex("EquipoID");
-
-                    b.ToTable("Puestos");
                 });
 
             modelBuilder.Entity("SIGEAC.Models.Usuario", b =>
@@ -146,21 +93,6 @@ namespace SIGEAC.Migrations
                         .IsRequired();
 
                     b.Navigation("Usuario");
-                });
-
-            modelBuilder.Entity("SIGEAC.Models.Puesto", b =>
-                {
-                    b.HasOne("SIGEAC.Models.Empleado", "Empleado")
-                        .WithMany()
-                        .HasForeignKey("EmpleadoID");
-
-                    b.HasOne("SIGEAC.Models.Equipo", "Equipo")
-                        .WithMany()
-                        .HasForeignKey("EquipoID");
-
-                    b.Navigation("Empleado");
-
-                    b.Navigation("Equipo");
                 });
 #pragma warning restore 612, 618
         }
