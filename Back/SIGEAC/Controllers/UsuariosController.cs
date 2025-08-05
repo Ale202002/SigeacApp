@@ -82,6 +82,25 @@ namespace SIGEAC.Controllers
             });
         }
 
+        [HttpGet("listar")]
+        public async Task<IActionResult> ListarUsuarios()
+        {
+            var usuarios = await _context.Usuarios.ToListAsync();
+            return Ok(usuarios);
+        }
+
+        [HttpGet("buscar/{id}")]
+        public async Task<IActionResult> BuscarUsuario(int id)
+        {
+            var usuario = await _context.Usuarios
+                .FirstOrDefaultAsync(u => u.ID_Usuario == id);
+
+            if (usuario == null)
+                return NotFound("Usuario no encontrado.");
+
+            return Ok(usuario);
+        }
+
         [HttpDelete("eliminar/{id}")]
         public async Task<IActionResult> EliminarUsuario(int id)
         {
@@ -95,6 +114,30 @@ namespace SIGEAC.Controllers
             await _context.SaveChangesAsync();
 
             return Ok($"Usuario con ID {id} eliminado correctamente.");
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] UsuarioLogin loginRequest)
+        {
+            var usuario = await _context.Usuarios
+                .FirstOrDefaultAsync(u => u.Email == loginRequest.Email && u.Contraseña == loginRequest.Contraseña);
+
+            if (usuario == null)
+            {
+                return Unauthorized("Credenciales incorrectas. Verifique su email y contraseña.");
+            }
+
+            return Ok(new
+            {
+                mensaje = "Inicio de sesión exitoso",
+                usuario = new
+                {
+                    usuario.ID_Usuario,
+                    usuario.Nombre,
+                    usuario.Email,
+                    usuario.Rol
+                }
+            });
         }
 
     }

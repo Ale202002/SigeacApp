@@ -27,6 +27,10 @@ namespace SIGEAC.Data
                 //Guarda a enum (Rol-Usuario) como string(Administrador, RRHH y User) en la base de datos 
             });
 
+            modelBuilder.Entity<Empleado>()
+                .HasIndex(e => e.UsuarioId)
+                .IsUnique();
+
         }
 
     }

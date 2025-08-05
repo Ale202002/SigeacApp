@@ -18,31 +18,6 @@ namespace SIGEAC.Controllers
             _context = context;
         }
 
-        [HttpGet("listar")]
-        public async Task<IActionResult> Listar()
-        {
-            var puestos = await _context.Puestos
-                .Include(p => p.Empleado)
-                .Include(p => p.Equipo)
-                .ToListAsync();
-
-            return Ok(puestos);
-        }
-
-        [HttpGet("buscar/{id}")]
-        public async Task<IActionResult> Buscar(int id)
-        {
-            var puesto = await _context.Puestos
-                .Include(p => p.Empleado)
-                .Include(p => p.Equipo)
-                .FirstOrDefaultAsync(p => p.ID_Puesto == id);
-
-            if (puesto == null)
-                return NotFound("Puesto no encontrado.");
-
-            return Ok(puesto);
-        }
-
         [HttpPost("crear")]
         public async Task<IActionResult> Crear([FromBody] PuestoCreate request)
         {
@@ -80,6 +55,31 @@ namespace SIGEAC.Controllers
 
             await _context.SaveChangesAsync();
             return Ok("Puesto editado correctamente.");
+        }
+
+        [HttpGet("listar")]
+        public async Task<IActionResult> Listar()
+        {
+            var puestos = await _context.Puestos
+                .Include(p => p.Empleado)
+                .Include(p => p.Equipo)
+                .ToListAsync();
+
+            return Ok(puestos);
+        }
+
+        [HttpGet("buscar/{id}")]
+        public async Task<IActionResult> Buscar(int id)
+        {
+            var puesto = await _context.Puestos
+                .Include(p => p.Empleado)
+                .Include(p => p.Equipo)
+                .FirstOrDefaultAsync(p => p.ID_Puesto == id);
+
+            if (puesto == null)
+                return NotFound("Puesto no encontrado.");
+
+            return Ok(puesto);
         }
 
         [HttpDelete("eliminar/{id}")]
