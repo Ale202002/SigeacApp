@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SIGEAC.Data;
 
@@ -11,9 +12,11 @@ using SIGEAC.Data;
 namespace SIGEAC.Migrations
 {
     [DbContext(typeof(SigeacDbContext))]
-    partial class SigeacDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250806165234_ActualizarEquipoFixCascade")]
+    partial class ActualizarEquipoFixCascade
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

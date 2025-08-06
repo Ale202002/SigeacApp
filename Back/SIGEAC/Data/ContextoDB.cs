@@ -31,6 +31,30 @@ namespace SIGEAC.Data
                 .HasIndex(e => e.UsuarioId)
                 .IsUnique();
 
+            modelBuilder.Entity<Equipo>()
+                .HasIndex(e => e.IdentificadorActivo)
+                .IsUnique();
+
+            modelBuilder.Entity<Equipo>()
+                .HasIndex(e => e.EmpleadoAsignadoID)
+                .IsUnique(); // un empleado solo puede tener un equipo asignado
+
+            modelBuilder.Entity<Equipo>()
+                .HasMany(e => e.UsuariosAutorizados)
+                .WithMany();
+
+            modelBuilder.Entity<Equipo>()
+                .HasOne(e => e.Puesto)
+                .WithOne(p => p.Equipo)
+                .HasForeignKey<Equipo>(e => e.PuestoID)
+                .IsRequired();
+
+            modelBuilder.Entity<Equipo>()
+                .HasOne(e => e.EmpleadoAsignado)
+                .WithOne()
+                .HasForeignKey<Equipo>(e => e.EmpleadoAsignadoID)
+                .OnDelete(DeleteBehavior.Restrict);
+
         }
 
     }
