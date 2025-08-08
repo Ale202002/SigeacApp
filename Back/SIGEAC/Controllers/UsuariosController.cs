@@ -33,7 +33,7 @@ namespace SIGEAC.Controllers
                 Nombre = request.Nombre,
                 Rol = request.Rol,
                 Email = request.Email,
-                Contraseña = request.Contraseña 
+                Contrasena = request.Contrasena 
             };
 
             _context.Usuarios.Add(nuevoUsuario);
@@ -120,7 +120,7 @@ namespace SIGEAC.Controllers
         public async Task<IActionResult> Login([FromBody] UsuarioLogin loginRequest)
         {
             var usuario = await _context.Usuarios
-                .FirstOrDefaultAsync(u => u.Email == loginRequest.Email && u.Contraseña == loginRequest.Contraseña);
+                .FirstOrDefaultAsync(u => u.Email == loginRequest.Email && u.Contrasena == loginRequest.Contrasena);
 
             if (usuario == null)
             {

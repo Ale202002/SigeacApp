@@ -6,7 +6,7 @@ namespace SIGEAC.Models
     {
         public required string Nombre { get; set; }
         public required string Email { get; set; }
-        public required string Contraseña { get; set; }
+        public required string Contrasena { get; set; }
         public Rol_Usuario_ Rol { get; set; }
     }
 }

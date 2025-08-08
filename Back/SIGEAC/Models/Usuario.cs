@@ -11,7 +11,7 @@ namespace SIGEAC.Models
         public string? Nombre { get; set; }
         public Rol_Usuario_ Rol { get; set; } //usamos rol_usuario para verif que el rol sea uno de lo permitidos
         public string? Email { get; set; }
-        public string? Contraseña { get; set; }
+        public string? Contrasena { get; set; }
     }
 
 }
