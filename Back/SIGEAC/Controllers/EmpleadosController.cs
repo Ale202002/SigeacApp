@@ -19,26 +19,25 @@ namespace SIGEAC.Controllers
         [HttpPost("crear")]
         public async Task<IActionResult> CrearEmpleado([FromBody] EmpleadoCreate request)
         {
-            // Verificar si el usuario existe
-            var usuario = await _context.Usuarios.FindAsync(request.UsuarioId);
-            if (usuario == null)
+            // 1. Crear Usuario
+            var nuevoUsuario = new Usuario
             {
-                return NotFound($"No se encontró un usuario con ID {request.UsuarioId}");
-            }
+                Nombre = request.NombreCompleto,
+                Email = request.CorreoElectronico,
+                Contrasena = request.Contrasena,  
+                Rol = request.Rol
+            };
 
-            // Verificar si el usuarioid ya está asignado a otro empleado
-            var usuarioYaAsignado = await _context.Empleados.AnyAsync(e => e.UsuarioId == request.UsuarioId);
-            if (usuarioYaAsignado)
-            {
-                return Conflict("Este usuario ya está asignado a otro empleado.");
-            }
+            _context.Usuarios.Add(nuevoUsuario);
+            await _context.SaveChangesAsync();
 
+            // 2. Crear Empleado asociado
             var nuevoEmpleado = new Empleado
             {
                 NombreCompleto = request.NombreCompleto,
                 DNI = request.DNI,
                 CorreoElectronico = request.CorreoElectronico,
-                UsuarioId = request.UsuarioId
+                UsuarioId = nuevoUsuario.ID_Usuario
             };
 
             _context.Empleados.Add(nuevoEmpleado);
@@ -53,6 +52,7 @@ namespace SIGEAC.Controllers
                 nuevoEmpleado.UsuarioId
             });
         }
+
 
         [HttpPut("modificar/{id}")]
         public async Task<IActionResult> ActualizarEmpleado(int id, [FromBody] EmpleadoUpdate request)
