@@ -1,0 +1,17 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;700;900&display=swap');
+
+body {
+  font-family: 'Red Hat Display', sans-serif;
+  background-color: #F5F5F5;
+  color: #064b59;
+}
+
+/* Colores personalizados para uso directo en CSS (opcional, si no usas Tailwind para todo) */
+:root {
+  --color-primary: #064b59;
+  --color-secondary: #136F7C;
+  --color-accent: #E47547;
+  --color-gray: #6C6C6C;
+  --color-light: #F5F5F5;
+}
