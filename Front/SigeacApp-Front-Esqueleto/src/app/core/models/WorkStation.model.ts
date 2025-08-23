@@ -18,7 +18,6 @@ export interface WorkStationCreate {
 }
 
 export interface WorkStationUpdate {
-    ID_Puesto: number;
     Ubicacion: string;
     Estado: number;
     EmpleadoID: Employee;

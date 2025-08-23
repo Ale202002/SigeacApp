@@ -1,4 +1,6 @@
 import { Employee } from './Employee.model';
+import { LevelCri } from './enums/level-cri.enum';
+import { PropertyAccess } from './enums/property-access.enum';
 import { WorkStation } from './WorkStation.model';
 
 export interface device {
@@ -25,12 +27,12 @@ export interface device {
   VersionSO: string;
   Soporte: boolean;
 
-  // Niveles de seguridad 
-  /*
-  Confidencialidad: NivelCriticidad;
-  Disponibilidad: NivelCriticidad;
-  Integridad: NivelCriticidad;
-  Criticidad: NivelCriticidad;
+   //Niveles de seguridad 
+  
+  Confidencialidad: LevelCri;
+  Disponibilidad: LevelCri;
+  Integridad: LevelCri;
+  Criticidad: LevelCri;
   FechaClasificacion: string;
 
   // Fecha de clasificación */
@@ -42,12 +44,12 @@ export interface device {
   EscritorioRemoto: boolean;
 
   // Accesorios
-  /*
-  Monitor: PropiedadAccesorio;
-  Teclado: PropiedadAccesorio;
-  Mouse: PropiedadAccesorio;
-  Auriculares: PropiedadAccesorio;
-  */
+  
+  Monitor: PropertyAccess;
+  Teclado: PropertyAccess;
+  Mouse: PropertyAccess;
+  Auriculares: PropertyAccess;
+  
 
   // Hardware
   Procesador: string;
