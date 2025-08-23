@@ -4,6 +4,6 @@
     {
         Administrador,
         RRHH,
-        Usuario
+        Empleado
     }
 }

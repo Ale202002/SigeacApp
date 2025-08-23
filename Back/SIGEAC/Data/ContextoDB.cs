@@ -8,14 +8,13 @@ namespace SIGEAC.Data
         public SigeacDbContext(DbContextOptions<SigeacDbContext> options) : base(options) { }
 
         public DbSet<Usuario> Usuarios { get; set; }
-        public DbSet<Empleado> Empleados { get; set; }
+        //public DbSet<Empleado> Empleados { get; set; }
         public DbSet<Equipo> Equipos { get; set; }
         public DbSet<Puesto> Puestos { get; set; }
 
-
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Usuario
             modelBuilder.Entity<Usuario>()
                 .HasIndex(u => u.Email)
                 .IsUnique();
@@ -23,14 +22,14 @@ namespace SIGEAC.Data
             modelBuilder.Entity<Usuario>(entity =>
             {
                 entity.Property(u => u.Rol)
-                .HasConversion<string>();
-                //Guarda a enum (Rol-Usuario) como string(Administrador, RRHH y User) en la base de datos 
+                      .HasConversion<string>();
+                // Guarda el enum (Rol_Usuario_) como string en la base de datos
             });
 
-            modelBuilder.Entity<Empleado>()
-                .HasIndex(e => e.UsuarioId)
-                .IsUnique();
+            // Empleado
+            
 
+            // Equipo
             modelBuilder.Entity<Equipo>()
                 .HasIndex(e => e.IdentificadorActivo)
                 .IsUnique();
@@ -55,8 +54,29 @@ namespace SIGEAC.Data
                 .HasForeignKey<Equipo>(e => e.EmpleadoAsignadoID)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            // 🔹 Usuarios iniciales (Admin y RRHH)
+            modelBuilder.Entity<Usuario>().HasData(
+                new Usuario
+                {
+                    ID_Usuario = 1,
+                    Nombre = "Admin",
+                    Apellido = "Principal",
+                    DNI = "00000001",
+                    Email = "admin@sigeac.com",
+                    Contrasena = "Admin123", // ⚠️ en producción debería ir hasheada
+                    Rol = Rol_Usuario_.Administrador
+                },
+                new Usuario
+                {
+                    ID_Usuario = 2,
+                    Nombre = "RRHH",
+                    Apellido = "Principal",
+                    DNI = "00000002",
+                    Email = "rrhh@sigeac.com",
+                    Contrasena = "RRHH123", // ⚠️ igual, hasheado en sistemas reales
+                    Rol = Rol_Usuario_.RRHH
+                }
+            );
         }
-
     }
-
 }

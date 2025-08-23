@@ -28,7 +28,7 @@ namespace SIGEAC.Controllers
             {
                 Ubicacion = request.Ubicacion,
                 Estado = request.Estado,
-                EmpleadoID = request.EmpleadoID,
+                UsuarioID = request.UsuarioID,
                 EquipoID = request.EquipoID
             };
 
@@ -50,7 +50,7 @@ namespace SIGEAC.Controllers
 
             puesto.Ubicacion = request.Ubicacion;
             puesto.Estado = request.Estado;
-            puesto.EmpleadoID = request.EmpleadoID;
+            puesto.UsuarioID = request.UsuarioID;
             puesto.EquipoID = request.EquipoID;
 
             await _context.SaveChangesAsync();

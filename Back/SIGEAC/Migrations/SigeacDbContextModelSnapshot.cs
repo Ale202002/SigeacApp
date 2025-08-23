@@ -22,50 +22,19 @@ namespace SIGEAC.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("EmpleadoEquipo", b =>
+            modelBuilder.Entity("EquipoUsuario", b =>
                 {
                     b.Property<int>("EquipoID_Equipo")
                         .HasColumnType("int");
 
-                    b.Property<int>("UsuariosAutorizadosID_Empleado")
+                    b.Property<int>("UsuariosAutorizadosID_Usuario")
                         .HasColumnType("int");
 
-                    b.HasKey("EquipoID_Equipo", "UsuariosAutorizadosID_Empleado");
+                    b.HasKey("EquipoID_Equipo", "UsuariosAutorizadosID_Usuario");
 
-                    b.HasIndex("UsuariosAutorizadosID_Empleado");
+                    b.HasIndex("UsuariosAutorizadosID_Usuario");
 
-                    b.ToTable("EmpleadoEquipo");
-                });
-
-            modelBuilder.Entity("SIGEAC.Models.Empleado", b =>
-                {
-                    b.Property<int>("ID_Empleado")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID_Empleado"));
-
-                    b.Property<string>("CorreoElectronico")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DNI")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NombreCompleto")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UsuarioId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ID_Empleado");
-
-                    b.HasIndex("UsuarioId")
-                        .IsUnique();
-
-                    b.ToTable("Empleados");
+                    b.ToTable("EquipoUsuario");
                 });
 
             modelBuilder.Entity("SIGEAC.Models.Equipo", b =>
@@ -199,9 +168,6 @@ namespace SIGEAC.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID_Puesto"));
 
-                    b.Property<int?>("EmpleadoID")
-                        .HasColumnType("int");
-
                     b.Property<int?>("EquipoID")
                         .HasColumnType("int");
 
@@ -213,9 +179,12 @@ namespace SIGEAC.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("UsuarioID")
+                        .HasColumnType("int");
+
                     b.HasKey("ID_Puesto");
 
-                    b.HasIndex("EmpleadoID");
+                    b.HasIndex("UsuarioID");
 
                     b.ToTable("Puestos");
                 });
@@ -228,14 +197,29 @@ namespace SIGEAC.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID_Usuario"));
 
+                    b.Property<string>("Apellido")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<string>("Contrasena")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DNI")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(450)");
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.Property<string>("Nombre")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Rol")
                         .IsRequired()
@@ -244,13 +228,34 @@ namespace SIGEAC.Migrations
                     b.HasKey("ID_Usuario");
 
                     b.HasIndex("Email")
-                        .IsUnique()
-                        .HasFilter("[Email] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Usuarios");
+
+                    b.HasData(
+                        new
+                        {
+                            ID_Usuario = 1,
+                            Apellido = "Principal",
+                            Contrasena = "Admin123",
+                            DNI = "00000001",
+                            Email = "admin@sigeac.com",
+                            Nombre = "Admin",
+                            Rol = "Administrador"
+                        },
+                        new
+                        {
+                            ID_Usuario = 2,
+                            Apellido = "Principal",
+                            Contrasena = "RRHH123",
+                            DNI = "00000002",
+                            Email = "rrhh@sigeac.com",
+                            Nombre = "RRHH",
+                            Rol = "RRHH"
+                        });
                 });
 
-            modelBuilder.Entity("EmpleadoEquipo", b =>
+            modelBuilder.Entity("EquipoUsuario", b =>
                 {
                     b.HasOne("SIGEAC.Models.Equipo", null)
                         .WithMany()
@@ -258,27 +263,16 @@ namespace SIGEAC.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SIGEAC.Models.Empleado", null)
+                    b.HasOne("SIGEAC.Models.Usuario", null)
                         .WithMany()
-                        .HasForeignKey("UsuariosAutorizadosID_Empleado")
+                        .HasForeignKey("UsuariosAutorizadosID_Usuario")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("SIGEAC.Models.Empleado", b =>
-                {
-                    b.HasOne("SIGEAC.Models.Usuario", "Usuario")
-                        .WithMany()
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("SIGEAC.Models.Equipo", b =>
                 {
-                    b.HasOne("SIGEAC.Models.Empleado", "EmpleadoAsignado")
+                    b.HasOne("SIGEAC.Models.Usuario", "EmpleadoAsignado")
                         .WithOne()
                         .HasForeignKey("SIGEAC.Models.Equipo", "EmpleadoAsignadoID")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -297,9 +291,9 @@ namespace SIGEAC.Migrations
 
             modelBuilder.Entity("SIGEAC.Models.Puesto", b =>
                 {
-                    b.HasOne("SIGEAC.Models.Empleado", "Empleado")
+                    b.HasOne("SIGEAC.Models.Usuario", "Empleado")
                         .WithMany()
-                        .HasForeignKey("EmpleadoID");
+                        .HasForeignKey("UsuarioID");
 
                     b.Navigation("Empleado");
                 });

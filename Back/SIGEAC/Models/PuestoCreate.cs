@@ -10,7 +10,7 @@ namespace SIGEAC.Models
         [Required]
         public required string Estado { get; set; }
 
-        public int? EmpleadoID { get; set; }
+        public int? UsuarioID { get; set; }
 
         public int? EquipoID { get; set; }
     }

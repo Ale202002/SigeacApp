@@ -8,10 +8,29 @@ namespace SIGEAC.Models
     {
         [Key]
         public int ID_Usuario { get; set; }
-        public string? Nombre { get; set; }
-        public Rol_Usuario_ Rol { get; set; } //usamos rol_usuario para verif que el rol sea uno de lo permitidos
-        public string? Email { get; set; }
-        public string? Contrasena { get; set; }
+
+        [Required]
+        [MaxLength(100)]
+        public required string Nombre { get; set; }
+
+        [Required]
+        [MaxLength(100)]
+        public required string Apellido { get; set; }
+
+        [Required]
+        [MaxLength(20)]
+        public required string DNI { get; set; }
+
+        [Required]
+        [EmailAddress]
+        [MaxLength(150)]
+        public required string Email { get; set; }
+
+        [Required]
+        public required string Contrasena { get; set; }
+
+        [Required]
+        public Rol_Usuario_ Rol { get; set; }  // Admin, RRHH, Empleado
     }
 
 }

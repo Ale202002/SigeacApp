@@ -28,7 +28,7 @@ namespace SIGEAC.Models
         // Relación con Empleado Asignado (uno a uno)
         [Required]
         public int EmpleadoAsignadoID { get; set; }
-        public Empleado EmpleadoAsignado { get; set; } = null!;
+        public Usuario EmpleadoAsignado { get; set; } = null!;
 
         [Required]
         public string IP { get; set; } = string.Empty;
@@ -105,6 +105,6 @@ namespace SIGEAC.Models
         public string? Adicionales { get; set; }
 
         // Relación con Usuarios Autorizados (muchos a muchos)
-        public List<Empleado> UsuariosAutorizados { get; set; } = new List<Empleado>();
+        public List<Usuario> UsuariosAutorizados { get; set; } = new List<Usuario>();
     }
 }

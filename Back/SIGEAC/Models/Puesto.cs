@@ -14,8 +14,8 @@ namespace SIGEAC.Models
         public required string Estado { get; set; }
 
         // Relación con Empleado
-        public int? EmpleadoID { get; set; }
-        public Empleado? Empleado { get; set; }
+        public int? UsuarioID { get; set; }
+        public Usuario? Empleado { get; set; }
 
         // Relación con Equipo
         public int? EquipoID { get; set; }
