@@ -1,0 +1,66 @@
+<div class="flex min-h-screen font-redhat bg-light">
+  <!-- Left side: Image and logo -->
+  <div class="w-1/2 bg-cover bg-center relative hidden md:block" style="background-image: url('/login/login-desktop.svg');">
+    <div class="absolute bottom-8 left-8 flex items-center">
+      <img src="/login/icon-encode.svg" alt="EncodeLabs Logo" class="h-10 w-10 mr-2" />
+      <span class="text-white text-xl font-bold">EncodeLabs</span>
+    </div>
+    <div class="absolute bottom-4 right-8 text-white text-sm opacity-70"></div>
+  </div>
+  <!-- Right side: Login form -->
+  <div class="w-full md:w-1/2 flex items-center justify-center bg-white">
+    <form [formGroup]="loginForm" (ngSubmit)="showErrors = true; login()" class="w-full max-w-md px-8 py-12 flex flex-col items-center rounded-lg shadow-lg">
+      <img src="/icon-sigeac.svg" alt="Mascota EncodeLabs" class="h-24 mb-6" />
+      <h2 class="text-2xl font-bold mb-6 text-center text-primary">Iniciar Sesión</h2>
+      <div class="w-full mb-4">
+        <label
+          class="block font-medium mb-2"
+          for="Email"
+          [class.text-accent]="loginForm.get('email')?.invalid && showErrors"
+        >Correo electrónico</label>
+        <input
+          id="Email"
+          type="email"
+          formControlName="email"
+          placeholder="Correo electrónico"
+          class="w-full px-4 py-2 border border-[#136F7C] rounded focus:outline-none focus:ring-2 focus:ring-[#064b59] text-primary bg-light font-medium"
+          [class.border-accent]="loginForm.get('email')?.invalid && showErrors"
+        />
+        @if (loginForm.get('email')?.invalid && showErrors) {
+          <div class="text-[#E47547] text-sm">Correo electrónico no es correcto</div>
+        }
+      </div>
+      <div class="w-full mb-4">
+        <label
+          class="block font-medium mb-2"
+          for="contrasena"
+          [class.text-accent]="loginForm.get('contrasena')?.invalid && showErrors"
+        >Contraseña</label>
+        <input
+          id="contrasena"
+          type="password"
+          formControlName="contrasena"
+          placeholder="Contraseña"
+          class="w-full px-4 py-2 border border-[#136F7C] rounded focus:outline-none focus:ring-2 focus:ring-[#064b59] text-primary bg-light font-medium"
+          [class.border-accent]="loginForm.get('contrasena')?.invalid && showErrors"
+        />
+        @if (loginForm.get('contrasena')?.invalid && showErrors) {
+          <div class="text-[#E47547] text-sm">La contraseña ingresada no es correcta</div>
+        }
+      </div>
+      <button
+        type="submit"
+        [disabled]="loginForm.invalid"
+        class="w-full bg-[#8CB9D8] text-white font-bold py-2 rounded mt-4 text-center transition hover:bg-[#6CA6C1]"
+      >
+        Iniciar Sesión
+      </button>
+      <div class="w-full flex justify-end mt-2">
+        <button type="button" class="text-grayCustom text-sm hover:underline">
+          ¿Olvidaste tu contraseña?
+        </button>
+      </div>
+      <!-- Puedes agregar aquí el mensaje de error general si lo necesitas -->
+    </form>
+  </div>
+</div>
