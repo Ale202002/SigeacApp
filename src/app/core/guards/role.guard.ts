@@ -6,6 +6,8 @@ import { RoleUser } from '../models/enums/role-user.enum';
 @Injectable({
   providedIn: 'root'
 })
+
+// Este guard se encarga de proteger las rutas que requieren un rol específico
 export class RoleGuard implements CanActivate {
 
   constructor(
@@ -13,6 +15,7 @@ export class RoleGuard implements CanActivate {
     private router: Router
   ) {}
 
+  //se usa el metodo  booleano para verificar si el usuario tiene el rol permitido
   canActivate(route: ActivatedRouteSnapshot): boolean {
     const allowedRoles = route.data['roles'] as RoleUser[];
 
@@ -41,9 +44,10 @@ export class RoleGuard implements CanActivate {
     return false;
   }
 
+  //redirige al usuario segun su rol
   private redirectByRole(role: RoleUser): void {
     switch (role) {
-      case RoleUser.Usuario:
+      case RoleUser.Empleado:
         this.router.navigate(['/mi-equipo']);
         break;
       case RoleUser.RRHH:

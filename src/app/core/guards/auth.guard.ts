@@ -5,6 +5,8 @@ import { AuthService } from '../services/auth.service';
 @Injectable({
   providedIn: 'root'
 })
+
+// este guard se encargar de proteger las rutas que requieren autenticacion
 export class AuthGuard implements CanActivate {
   constructor(
     private authService: AuthService,

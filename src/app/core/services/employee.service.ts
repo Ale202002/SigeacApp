@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+/*import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Employee, EmployeeCreate, EmployeeUpdate } from '../models/Employee.model';
@@ -47,4 +47,7 @@ export class EmployeeService {
     const params = employeeId ? `?employeeId=${employeeId}` : '';
     return this.http.get<boolean>(`${this.API_URL}/validar-correo/${correo}${params}`);
   }
-}
+}*/
+
+
+//este servicio de employee se eliminara?? ya que no se usa mas el crud de empleados

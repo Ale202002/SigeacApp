@@ -7,11 +7,13 @@ import { WorkStation, WorkStationCreate, WorkStationUpdate } from '../models/Wor
   providedIn: 'root'
 })
 export class WorkStationService {
+  //URL de la API de /Puestos
   private readonly API_URL = 'https://localhost:44334/api/Puestos';
 
+  //Se inyecta el httpclient para las peticiones al backend
   constructor(private http: HttpClient) {}
 
-  // Métodos que coinciden EXACTAMENTE con tu Swagger
+ //Se hace el CRUD de puestos de linea 17 hasta 35
   crear(puesto: WorkStationCreate): Observable<any> {
     return this.http.post(`${this.API_URL}/crear`, puesto);
   }

@@ -1,5 +1,6 @@
+  <!-- este div divide la pantalala en dos secciones la imagen con su logo a la derecha y el login a la izquierda -->
 <div class="flex min-h-screen font-redhat bg-light">
-  <!-- Left side: Image and logo -->
+  <!--este otro div contiene la imagen de fondo para la pantalla de login en desktop -->
   <div class="w-1/2 bg-cover bg-center relative hidden md:block" style="background-image: url('/login/login-desktop.svg');">
     <div class="absolute bottom-8 left-8 flex items-center">
       <img src="/login/icon-encode.svg" alt="EncodeLabs Logo" class="h-10 w-10 mr-2" />
@@ -7,7 +8,7 @@
     </div>
     <div class="absolute bottom-4 right-8 text-white text-sm opacity-70"></div>
   </div>
-  <!-- Right side: Login form -->
+  <!-- este div se usa reactiveforms para los campos de login(email,contraseña) -->
   <div class="w-full md:w-1/2 flex items-center justify-center bg-white">
     <form [formGroup]="loginForm" (ngSubmit)="showErrors = true; login()" class="w-full max-w-md px-8 py-12 flex flex-col items-center rounded-lg shadow-lg">
       <img src="/icon-sigeac.svg" alt="Mascota EncodeLabs" class="h-24 mb-6" />
@@ -64,3 +65,5 @@
     </form>
   </div>
 </div>
+
+<!-- este html utiliza tailwindcss con reactiveforms-->

@@ -1,9 +1,11 @@
+//es un enum para definir los accesos a propiedades
 export enum PropertyAccess{
     Compania='Compania',
     Empleado='Empleado',
     No='No',
 }
 
+// es un helper que convierte de número a rol
 export function getRolUserFromNumber(value: number): PropertyAccess {
   switch (value) {
     case 0: return PropertyAccess.Compania;
@@ -13,7 +15,7 @@ export function getRolUserFromNumber(value: number): PropertyAccess {
   }
 }
 
-// Helper para convertir de enum a número (para API)
+// es un helper que convierte de rol a número
 export function getPropertyAccessNumber(rol: PropertyAccess): number {
   switch (rol) {
     case PropertyAccess.Compania: return 0;

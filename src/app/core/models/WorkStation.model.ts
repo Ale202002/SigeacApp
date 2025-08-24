@@ -1,27 +1,30 @@
-import { Employee } from './Employee.model';
-import { device } from './Device.model';
+import { User } from './User.model';
+import { Device } from './Device.model';
+
+//aca se definen las interfaces de puesto de trabajo que 
+// tienen los datos tambien de equipo y usuario, esto se saco de los datos del backend
 export interface WorkStation {
     ID_Puesto: number;
     Ubicacion: string;
     Estado: number;
-    EmpleadoID: Employee;
-    Empleado?: Employee;
+    UsuarioID: User;
+    Empleado?: User
     EquipoID: number;
-    Equipo?: device;
+    Equipo?: Device;
 }
 
 export interface WorkStationCreate {
     Ubicacion: string;
     Estado: number;
-    EmpleadoID: Employee;
-    EquipoID: number;
+    UsuarioID?: User;
+    EquipoID?: number;
 }
 
 export interface WorkStationUpdate {
     Ubicacion: string;
     Estado: number;
-    EmpleadoID: Employee;
-    EquipoID: number;
+    UsuarioID?: User;
+    EquipoID?: number;
 }
 
 

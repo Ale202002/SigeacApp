@@ -1,4 +1,4 @@
-import { User } from './User.model';
+/*import { User } from './User.model';
 export interface Employee {
     ID_Empleado: number;
     NombreCompleto: string;
@@ -21,3 +21,7 @@ export interface EmployeeUpdate {
     CorreoElectronico: string;
     UsuarioId: number;
 }
+*/
+
+
+//Esta interfaz se eliminara?? ya que no se usa mas el crud de empleados

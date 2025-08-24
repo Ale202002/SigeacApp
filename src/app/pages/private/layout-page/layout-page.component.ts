@@ -10,12 +10,20 @@ import { RoleUser } from '../../../core/models/enums/role-user.enum';
   imports: [RouterOutlet, RouterLink, CommonModule],
   templateUrl: './layout-page.component.html',
 })
+
+//este componente seria el principal para las paginas privadas despues del login y 
+// se navega segun el rol del usuario solamente.
 export default class LayoutPageComponent {
+  //injectamos los servicios(authservice y router)
   private authService = inject(AuthService);
   private router = inject(Router);
 
+ /* constructor() {
+    this.authService.debugUser();
+  }*/
 
-  // Obtener el usuario actual usando el método público
+
+  // estos get se usan para obtener información del usuario actual y su rol
   get user() {
     return this.authService.getCurrentUser();
   }
@@ -29,17 +37,20 @@ export default class LayoutPageComponent {
   }
 
   get isUser() {
-    return this.user?.rol === RoleUser.Usuario;
+    return this.user?.rol === RoleUser.Empleado;
   }
 
+  //este string se usa para manejar los menus para mostrar u ocultar los submenus
   activeSection: string = '';
 
+  //este togglesection se usa para activar o desactivar los submenus
   toggleSection(section: string) {
     this.activeSection = this.activeSection === section ? '' : section;
   }
 
+  //esta funcion se usa para cerrar la sesion del usuario
   logoff() {
-    localStorage.removeItem('leaveUser');
-    this.router.navigateByUrl('/login');
+  this.authService.logout();
+  this.router.navigateByUrl('/login');
   }
 }

@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import 'primeicons/primeicons.css';
 
 body {
   font-family: 'Red Hat Display', sans-serif;
@@ -13,4 +14,19 @@ body {
   --color-accent: #E47547;
   --color-gray: #6C6C6C;
   --color-light: #F5F5F5;
+}
+
+.p-table {
+  width: 100%;
+  min-width: 600px;
+  max-width: 100%;
+  font-size: 1rem;
+  /* No usar margin ni position global aquí */
+}
+
+@media (max-width: 768px) {
+  .p-table {
+    min-width: 100%;
+    font-size: 0.95rem;
+  }
 }

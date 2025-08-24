@@ -3,7 +3,8 @@ import { AuthGuard } from './core/guards/auth.guard';
 import { RoleGuard } from './core/guards/role.guard';
 import { RoleUser } from './core/models/enums/role-user.enum';
 
-
+//esta es la raiz de las routes de la aplicacion en donde los usuarios son redirigidos segun su rol
+// y se comportan mediante los guards.
 export const routes: Routes = [
   {
     path: 'login',
@@ -22,8 +23,8 @@ export const routes: Routes = [
   // Consultas
   { path: 'employee', loadComponent: () => import('./pages/private/consultas/employee-page/employee-page.component').then(m => m.default), canActivate: [RoleGuard], data: { roles: [RoleUser.RRHH, RoleUser.Administrador] } },
   { path: 'workstation', loadComponent: () => import('./pages/private/consultas/workstation-page/workstation-page.component').then(m => m.default), canActivate: [RoleGuard], data: { roles: [RoleUser.Administrador] } },
-  { path: 'devices', loadComponent: () => import('./pages/private/consultas/device-page/device-page.component').then(m => m.default), canActivate: [RoleGuard], data: { roles: [RoleUser.Administrador, RoleUser.Usuario] } },
-  { path: 'my-device', loadComponent: () => import('./pages/private/consultas/device-page/my-device-page/my-device-page.component').then(m => m.default), canActivate: [RoleGuard], data: { roles: [RoleUser.Usuario] } },
+  { path: 'devices', loadComponent: () => import('./pages/private/consultas/device-page/device-page.component').then(m => m.default), canActivate: [RoleGuard], data: { roles: [RoleUser.Administrador, RoleUser.Empleado] } },
+  { path: 'my-device', loadComponent: () => import('./pages/private/consultas/device-page/my-device-page/my-device-page.component').then(m => m.default), canActivate: [RoleGuard], data: { roles: [RoleUser.Empleado] } },
   { path: 'components', loadComponent: () => import('./pages/private/consultas/components-page/components-page.component').then(m => m.default), canActivate: [RoleGuard], data: { roles: [RoleUser.Administrador] } },
   { path: 'history', loadComponent: () => import('./pages/private/consultas/history-page/history-page.component').then(m => m.default), canActivate: [RoleGuard], data: { roles: [RoleUser.Administrador, RoleUser.RRHH] } },
   // Otros
