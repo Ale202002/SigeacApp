@@ -94,15 +94,29 @@ namespace SIGEAC.Controllers
 
         // Login
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] UsuarioLogin request)
+        public async Task<IActionResult> Login([FromBody] UsuarioLogin loginRequest)
         {
             var usuario = await _context.Usuarios
-                .FirstOrDefaultAsync(u => u.Email == request.Email && u.Contrasena == request.Contrasena);
+                .FirstOrDefaultAsync(u => u.Email == loginRequest.Email && u.Contrasena == loginRequest.Contrasena);
 
             if (usuario == null)
-                return Unauthorized("Credenciales inválidas");
+            {
+                return Unauthorized("Credenciales incorrectas. Verifique su email y contraseña.");
+            }
 
-            return Ok("Inicio de sesión exitoso");
+            return Ok(new
+            {
+                mensaje = "Inicio de sesión exitoso",
+                usuario = new
+                {
+                    usuario.ID_Usuario,
+                    usuario.Nombre,
+                    usuario.Apellido,
+                    usuario.DNI,
+                    usuario.Email,
+                    usuario.Rol
+                }
+            });
         }
     }
 }
