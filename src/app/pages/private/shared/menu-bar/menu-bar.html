@@ -1,0 +1,76 @@
+<div class="bg-[var(--color-primary)] flex flex-col h-screen justify-between items-center py-8 px-6">
+		<div>
+			<div class="flex flex-col items-center mb-8">
+				<img src="/layout/icon-card-encodelabs.svg" alt="Logo" class="w-[270px] h-[215px] mt-[66px] mx-auto" />
+			</div>
+			<h2 class="text-white text-center text-lg font-bold mb-8 tracking-wide">SISTEMA DE GESTION DE ACTIVOS</h2>
+			<!-- Menús -->
+						<!-- Menús -->
+						<div class="space-y-4">
+							<!-- Paneles para Administrador -->
+							@if (isAdmin) {
+								<button (click)="toggleSection('home')" class="w-full flex justify-between items-center bg-white text-[var(--color-primary)] font-semibold py-2 px-4 rounded shadow hover:bg-gray-100">
+									Home
+									<span [class.rotate-180]="activeSection === 'home'" class="transition-transform">&#9660;</span>
+								</button>
+								@if (activeSection === 'home') {
+									<a routerLink="/dashboard/primer-piso" class="block bg-white text-[var(--color-primary)] hover:bg-[#136F7C] hover:text-white py-2 px-4 rounded shadow mb-1 transition-colors text-center">Primer Piso</a>
+									<a routerLink="/dashboard/planta-baja" class="block bg-white text-[var(--color-primary)] hover:bg-[#136F7C] hover:text-white py-2 px-4 rounded shadow mb-1 transition-colors text-center">Planta Baja</a>
+									<a routerLink="/dashboard/subsuelo" class="block bg-white text-[var(--color-primary)] hover:bg-[#136F7C] hover:text-white py-2 px-4 rounded shadow mb-1 transition-colors text-center">Subsuelo</a>
+								}
+								<button (click)="toggleSection('consultas')" class="w-full flex justify-between items-center bg-white text-[var(--color-primary)] font-semibold py-2 px-4 rounded shadow hover:bg-gray-100">
+									Consultas
+									<span [class.rotate-180]="activeSection === 'consultas'" class="transition-transform">&#9660;</span>
+								</button>
+								@if (activeSection === 'consultas') {
+									<a routerLink="/dashboard/employee" class="flex items-center bg-white text-[var(--color-primary)] hover:bg-[#136F7C] hover:text-white py-2 px-4 rounded shadow mb-1 transition-colors relative">
+										<i class="pi pi-user mr-auto"></i>
+										<span class="absolute left-1/2 transform -translate-x-1/2">Empleados</span>
+									</a>
+									<a routerLink="/dashboard/workstation" class="flex items-center bg-white text-[var(--color-primary)] hover:bg-[#136F7C] hover:text-white py-2 px-4 rounded shadow mb-1 transition-colors relative">
+										<i class="pi pi-table mr-auto"></i>
+										<span class="absolute left-1/2 transform -translate-x-1/2">Puestos</span>
+									</a>
+									<a routerLink="/dashboard/devices" class="flex items-center bg-white text-[var(--color-primary)] hover:bg-[#136F7C] hover:text-white py-2 px-4 rounded shadow mb-1 transition-colors relative">
+										<i class="pi pi-desktop mr-auto"></i>
+										<span class="absolute left-1/2 transform -translate-x-1/2">Equipos</span>
+									</a>
+									<a routerLink="/dashboard/components" class="flex items-center bg-white text-[var(--color-primary)] hover:bg-[#136F7C] hover:text-white py-2 px-4 rounded shadow mb-1 transition-colors relative">
+										<i class="pi pi-microchip mr-auto"></i>
+										<span class="absolute left-1/2 transform -translate-x-1/2">Componentes</span>
+									</a>
+									<a routerLink="/dashboard/history" class="flex items-center bg-white text-[var(--color-primary)] hover:bg-[#136F7C] hover:text-white py-2 px-4 rounded shadow mb-1 transition-colors relative">
+										<i class="pi pi-file mr-auto"></i>
+										<span class="absolute left-1/2 transform -translate-x-1/2">Historial</span>
+									</a>
+								}
+							}
+							<!-- Paneles para Usuario -->
+							@if (isUser) {
+								<button (click)="toggleSection('consultas')" class="w-full flex justify-between items-center bg-white text-[var(--color-primary)] font-semibold py-2 px-4 rounded shadow hover:bg-gray-100">
+									Consultas
+									<span [class.rotate-180]="activeSection === 'consultas'" class="transition-transform">&#9660;</span>
+								</button>
+								@if (activeSection === 'consultas') {
+									<a routerLink="/dashboard/my-device" class="block bg-white text-[var(--color-primary)] hover:bg-[#136F7C] hover:text-white py-2 px-4 rounded shadow mb-1 transition-colors text-center">Mi equipo</a>
+								}
+							}
+							<!-- Paneles para RRHH -->
+							@if (isRRHH) {
+								<button (click)="toggleSection('consultas')" class="w-full flex justify-between items-center bg-white text-[var(--color-primary)] font-semibold py-2 px-4 rounded shadow hover:bg-gray-100">
+									Consultas
+									<span [class.rotate-180]="activeSection === 'consultas'" class="transition-transform">&#9660;</span>
+								</button>
+								@if (activeSection === 'consultas') {
+									<a routerLink="/dashboard/employee" class="block bg-white text-[var(--color-primary)] hover:bg-[#136F7C] hover:text-white py-2 px-4 rounded shadow mb-1 text-center">Empleados</a>
+									<a routerLink="/dashboard/history" class="block bg-white text-[var(--color-primary)] hover:bg-[#136F7C] hover:text-white py-2 px-4 rounded shadow mb-1 text-center">Historial</a>
+								}
+							}
+						</div>
+		</div>
+		<div class="mt-8">
+			<button (click)="logoff()" class="w-full font-semibold py-2 px-4 rounded shadow transition-colors" style="background-color: #F77474; border: 2px solid #AF1F1F; color: #444;" onmouseover="this.style.color='#111'" onmouseout="this.style.color='#444'">
+				Cerrar sesión
+			</button>
+		</div>
+	</div>

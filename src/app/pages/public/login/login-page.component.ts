@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
 })
 
   //este componente maneja la logica de la pagina de login
-  export default class LoginPageComponent {
+  export class LoginPageComponent {
   //se utiliza los metodos reactive forms de angular para manejar el formulario de datos del login
   loginForm: FormGroup;
   error = '';

@@ -1,17 +1,17 @@
   <!-- este div divide la pantalala en dos secciones la imagen con su logo a la derecha y el login a la izquierda -->
 <div class="flex min-h-screen font-redhat bg-light">
   <!--este otro div contiene la imagen de fondo para la pantalla de login en desktop -->
-  <div class="w-1/2 bg-cover bg-center relative hidden md:block" style="background-image: url('/login/login-desktop.svg');">
-    <div class="absolute bottom-8 left-8 flex items-center">
-      <img src="/login/icon-encode.svg" alt="EncodeLabs Logo" class="h-10 w-10 mr-2" />
+  <div class="w-[40%] h-full min-h-screen bg-cover bg-center relative hidden md:block" style="background-image: url('/login/login-desktop.svg');">
+  <div class="absolute bottom-[32px] left-1/2 -translate-x-1/2 flex items-center z-10">
+    <img src="/login/icon-encode.svg" alt="EncodeLabs Logo" class="h-10 w-10 mr-2 z-10" />
       <span class="text-white text-xl font-bold">EncodeLabs</span>
     </div>
     <div class="absolute bottom-4 right-8 text-white text-sm opacity-70"></div>
   </div>
   <!-- este div se usa reactiveforms para los campos de login(email,contraseña) -->
-  <div class="w-full md:w-1/2 flex items-center justify-center bg-white">
+  <div class="w-full md:w-1/2 flex items-center justify-center bg-white ml-16">
     <form [formGroup]="loginForm" (ngSubmit)="showErrors = true; login()" class="w-full max-w-md px-8 py-12 flex flex-col items-center rounded-lg shadow-lg">
-      <img src="/icon-sigeac.svg" alt="Mascota EncodeLabs" class="h-24 mb-6" />
+  <img src="/icon-sigeac.svg" alt="Mascota EncodeLabs" class="h-32 mb-6" />
       <h2 class="text-2xl font-bold mb-6 text-center text-primary">Iniciar Sesión</h2>
       <div class="w-full mb-4">
         <label
@@ -57,7 +57,7 @@
         Iniciar Sesión
       </button>
       <div class="w-full flex justify-end mt-2">
-        <button type="button" class="text-grayCustom text-sm hover:underline">
+        <button type="button" class="text-grayCustom text-sm hover:underline text-center w-full">
           ¿Olvidaste tu contraseña?
         </button>
       </div>
