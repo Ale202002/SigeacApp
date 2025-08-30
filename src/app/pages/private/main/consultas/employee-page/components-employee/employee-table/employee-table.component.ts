@@ -16,6 +16,7 @@ export interface Employee {
     estado: string;
     correo: string;
     puesto: string;
+    selected?: boolean;
 }
 
 @Component({
@@ -27,9 +28,11 @@ export interface Employee {
 })
 export class EmployeeTableComponent implements OnInit {
     employees: Employee[] = [
-        { id: '1', nombre: 'Benjamín Varela', estado: 'activo', correo: 'bvarela@encodelabs.com.ar', puesto: 'SS-F1-01' },
-        { id: '2', nombre: 'Maria Emilia Mocayar', estado: 'inactivo', correo: 'memocayar@encodelabs.com', puesto: 'SS-F1-02' }
+        { id: '1', nombre: 'Leandro Martin Silva', estado: 'activo', correo: 'Lsilva@encodelabs.com.ar', puesto: 'Primer Piso', selected: false },
+        { id: '2', nombre: 'Matias Juri', estado: 'inactivo', correo: 'Mjuri@encodelabs.com', puesto: 'Planta Baja', selected: false }
     ];
+
+    allSelected: boolean = false;
 
         estados: any[] = [
             {
@@ -58,6 +61,14 @@ export class EmployeeTableComponent implements OnInit {
     selectedPlanta: string | null = null;
     selectedEstado: string | null = null;
     searchTerm: string = '';
+
+    toggleAllSelection() {
+        this.employees.forEach(emp => emp.selected = this.allSelected);
+    }
+
+    onRowSelectChange(rowIndex: number) {
+        this.allSelected = this.employees.every(emp => emp.selected);
+    }
 
     constructor(private messageService: MessageService) {}
 

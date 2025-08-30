@@ -39,9 +39,23 @@
 										<i class="pi pi-microchip mr-auto"></i>
 										<span class="absolute left-1/2 transform -translate-x-1/2">Componentes</span>
 									</a>
+									<a routerLink="/dashboard/peripherals" class="flex items-center bg-white text-[var(--color-primary)] hover:bg-[#136F7C] hover:text-white py-2 px-4 rounded shadow mb-1 transition-colors relative">
+										<i class="pi pi-tablet mr-auto"></i>
+										<span class="absolute left-1/2 transform -translate-x-1/2">Periféricos</span>
+									</a>
 									<a routerLink="/dashboard/history" class="flex items-center bg-white text-[var(--color-primary)] hover:bg-[#136F7C] hover:text-white py-2 px-4 rounded shadow mb-1 transition-colors relative">
 										<i class="pi pi-file mr-auto"></i>
 										<span class="absolute left-1/2 transform -translate-x-1/2">Historial</span>
+									</a>
+								}
+								<button (click)="toggleSection('generar')" class="w-full flex justify-between items-center bg-white text-[var(--color-primary)] font-semibold py-2 px-4 rounded shadow hover:bg-gray-100">
+									Generar
+									<span [class.rotate-180]="activeSection === 'generar'" class="transition-transform">&#9660;</span>
+								</button>
+								@if (activeSection === 'generar') {
+									<a routerLink="/dashboard/qr" class="flex items-center bg-white text-[var(--color-primary)] hover:bg-[#136F7C] hover:text-white py-2 px-4 rounded shadow mb-1 transition-colors relative">
+										<i class="pi pi-qrcode mr-auto"></i>
+										<span class="absolute left-1/2 transform -translate-x-1/2">QR</span>
 									</a>
 								}
 							}
@@ -52,7 +66,10 @@
 									<span [class.rotate-180]="activeSection === 'consultas'" class="transition-transform">&#9660;</span>
 								</button>
 								@if (activeSection === 'consultas') {
-									<a routerLink="/dashboard/my-device" class="block bg-white text-[var(--color-primary)] hover:bg-[#136F7C] hover:text-white py-2 px-4 rounded shadow mb-1 transition-colors text-center">Mi equipo</a>
+									<a routerLink="/dashboard/my-device" class="flex items-center bg-white text-[var(--color-primary)] hover:bg-[#136F7C] hover:text-white py-2 px-4 rounded shadow mb-1 transition-colors relative">
+										<i class="pi pi-desktop mr-auto"></i>
+										<span class="absolute left-1/2 transform -translate-x-1/2">Mi Equipo</span>
+									</a>
 								}
 							}
 							<!-- Paneles para RRHH -->
@@ -62,14 +79,20 @@
 									<span [class.rotate-180]="activeSection === 'consultas'" class="transition-transform">&#9660;</span>
 								</button>
 								@if (activeSection === 'consultas') {
-									<a routerLink="/dashboard/employee" class="block bg-white text-[var(--color-primary)] hover:bg-[#136F7C] hover:text-white py-2 px-4 rounded shadow mb-1 text-center">Empleados</a>
-									<a routerLink="/dashboard/history" class="block bg-white text-[var(--color-primary)] hover:bg-[#136F7C] hover:text-white py-2 px-4 rounded shadow mb-1 text-center">Historial</a>
+									<a routerLink="/dashboard/employee" class="flex items-center bg-white text-[var(--color-primary)] hover:bg-[#136F7C] hover:text-white py-2 px-4 rounded shadow mb-1 transition-colors relative">
+										<i class="pi pi-user mr-auto"></i>
+										<span class="absolute left-1/2 transform -translate-x-1/2">Empleados</span>
+									</a>
+									<a routerLink="/dashboard/history" class="flex items-center bg-white text-[var(--color-primary)] hover:bg-[#136F7C] hover:text-white py-2 px-4 rounded shadow mb-1 transition-colors relative">
+										<i class="pi pi-file mr-auto"></i>
+										<span class="absolute left-1/2 transform -translate-x-1/2">Historial</span>
+									</a>
 								}
 							}
 						</div>
 		</div>
 		<div class="mt-8">
-			<button (click)="logoff()" class="w-full font-semibold py-2 px-4 rounded shadow transition-colors" style="background-color: #F77474; border: 2px solid #AF1F1F; color: #444;" onmouseover="this.style.color='#111'" onmouseout="this.style.color='#444'">
+			<button (click)="logoff()" class="w-full font-semibold py-2 px-4 rounded shadow transition-colors" style="background-color: #F77474; border: 2px solid #AF1F1F; color: #AF1F1F;" onmouseover="this.style.color='#111'" onmouseout="this.style.color='#444'">
 				Cerrar sesión
 			</button>
 		</div>

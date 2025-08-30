@@ -7,7 +7,7 @@ import { EmployeeTableComponent } from "./components-employee/employee-table/emp
   standalone: true,
   selector: 'app-employee-page',
   imports: [ EmployeeTableComponent],
-  templateUrl: './employee-page.component.html',
+  templateUrl: './employee-page.html',
   
 })
 

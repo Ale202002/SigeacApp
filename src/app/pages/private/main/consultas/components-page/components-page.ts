@@ -4,7 +4,7 @@ import {  Component } from '@angular/core';
   standalone: true,
   selector: 'app-components-page',
   imports: [],
-  templateUrl: './components-page.component.html',
+  templateUrl: './components-page.html',
   
 })
 export class ComponentsPageComponent { }

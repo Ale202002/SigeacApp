@@ -1,92 +1,73 @@
 
 
 <!-- Filtros y buscador arriba -->
-<div class="flex gap-8 mb-2">
-    <div class="flex-1">
-        <p-treeSelect [options]="plantas" [(ngModel)]="selectedPlanta" placeholder="Planta" class="w-full" style="height:48px;"></p-treeSelect>
-    </div>
-    <div class="flex-1">
-        <p-treeSelect [options]="estados" [(ngModel)]="selectedEstado" placeholder="Estado" class="w-full" style="height:48px;"></p-treeSelect>
-    </div>
-    <div class="flex-1 flex items-center">
+<div class="flex gap-8 mb-12 justify-center mt-8">
+    <div class="flex items-center" style="width:246px; height:48px;">
         <span class="w-full relative">
-            <input type="text" [(ngModel)]="searchTerm" placeholder="Buscar..." class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none" style="height:48px;" />
+            <p-treeSelect [options]="plantas" [(ngModel)]="selectedPlanta" placeholder="Planta" class="w-full border rounded-lg px-4 py-3 focus:outline-none align-middle" style="width:246px; height:48px; line-height:32px; border-radius:0.5rem; border-color:#6C6C6C; border-width:2px; color:#555555AD;" ></p-treeSelect>
+        </span>
+    </div>
+    <div class="flex items-center" style="width:246px; height:48px;">
+        <span class="w-full relative">
+            <p-treeSelect [options]="estados" [(ngModel)]="selectedEstado" placeholder="Estado" class="w-full border rounded-lg px-4 py-3 focus:outline-none align-middle" style="width:246px; height:48px; line-height:32px; border-radius:0.5rem; border-color:#6C6C6C; border-width:2px; color:#555555AD;" ></p-treeSelect>
+        </span>
+    </div>
+    <div class="flex-1 max-w-xs flex items-center">
+        <span class="w-full relative">
+            <input type="text" [(ngModel)]="searchTerm" placeholder="Buscar..." class="w-full border rounded-lg px-4 py-3 focus:outline-none" style="height:48px; border-radius:0.5rem; border-color:#6C6C6C; border-width:2px; color:#555555AD;" />
             <i class="pi pi-search absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl"></i>
         </span>
     </div>
 </div>
 
-<!-- Tabla editable PrimeNG -->
-<p-table [value]="filteredEmployees" dataKey="id" editMode="row" class="w-full rounded-xl overflow-hidden shadow border border-gray-200" [tableStyle]="{'min-width': '50rem'}">
-    <ng-template pTemplate="header">
-    <tr class="bg-[#e8773c] h-[56px]">
-        <th class="w-[60px] text-center align-middle rounded-tl-xl"></th>
-        <th class="w-[220px] text-left font-semibold text-lg text-white">Nombre</th>
-        <th class="w-[180px] text-left font-semibold text-lg text-white">Estado</th>
-        <th class="w-[320px] text-left font-semibold text-lg text-white">Correo</th>
-        <th class="w-[140px] text-left font-semibold text-lg text-white rounded-tr-xl">Puesto</th>
-        <th class="w-[40px]"></th>
-        </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-employee let-editing="editing" let-ri="rowIndex">
-        <tr [pEditableRow]="employee">
-            <td class="text-center w-[60px]"></td>
-            <td class="w-[220px]">
-                <p-cellEditor>
-                    <ng-template pTemplate="input">
-                        <input pInputText type="text" [(ngModel)]="employee.nombre" />
+<!-- Tabla editable PrimeNG centrada horizontalmente y con border-radius solo en el header -->
+<div class="flex justify-center">
+    <div class="w-full max-w-5xl">
+                <p-table [value]="filteredEmployees" dataKey="id" class="w-full" [tableStyle]="{'min-width': '50rem'}">
+                    <ng-template pTemplate="header">
+                        <tr class="bg-[#e8773c] h-[56px] rounded-t-xl">
+                            <th class="w-[60px] text-center align-middle rounded-tl-xl">
+                                <div class="flex items-center justify-center h-[56px]">
+                                    <p-checkbox [(ngModel)]="allSelected" binary="true" (onChange)="toggleAllSelection()" styleClass="h-5 w-5 border-2 border-[#707374] rounded-md bg-white" ></p-checkbox>
+                                </div>
+                            </th>
+                            <th class="w-[220px] text-left font-semibold text-lg text-white">Nombre</th>
+                            <th class="w-[180px] text-left font-semibold text-lg text-white">Estado</th>
+                            <th class="w-[320px] text-left font-semibold text-lg text-white">Correo</th>
+                            <th class="w-[140px] text-left font-semibold text-lg text-white">Puesto</th>
+                            <th class="w-[40px] rounded-tr-xl"></th>
+                        </tr>
                     </ng-template>
-                    <ng-template pTemplate="output">
-                        <div class="flex items-center gap-2">
-                            <i class="pi pi-user text-xl text-gray-600"></i>
-                            <span class="text-gray-900 text-base">{{employee.nombre}}</span>
-                        </div>
+                    <ng-template pTemplate="body" let-employee let-rowIndex="rowIndex">
+                        <tr>
+                            <td class="text-center w-[60px]">
+                                <div class="flex items-center justify-center h-[40px]">
+                                    <p-checkbox [(ngModel)]="employee.selected" binary="true" (onChange)="onRowSelectChange(rowIndex)" styleClass="h-5 w-5 border-2 border-[#707374] rounded-md bg-white" ></p-checkbox>
+                                </div>
+                            </td>
+                            <td class="w-[220px]">
+                                <div class="flex items-center gap-2">
+                                    <i class="pi pi-user text-xl text-gray-600"></i>
+                                    <span class="text-gray-900 text-base">{{employee.nombre}}</span>
+                                </div>
+                            </td>
+                            <td class="w-[180px]">
+                                <span [ngClass]="employee.estado === 'activo' ? 'flex items-center gap-2 border border-green-400 text-green-600 bg-white rounded-full px-4 py-1 mr-4' : 'flex items-center gap-2 border border-red-400 text-red-600 bg-white rounded-full px-4 py-1 mr-4'">
+                                    <i [ngClass]="employee.estado === 'activo' ? 'pi pi-check text-green-500 text-xl' : 'pi pi-ban text-red-500 text-xl'"></i>
+                                    <span class="font-medium">{{employee.estado}}</span>
+                                </span>
+                            </td>
+                            <td class="w-[320px]">{{employee.correo}}</td>
+                            <td class="w-[140px]">{{employee.puesto}}</td>
+                            <td class="w-[40px]">
+                                <div class="flex gap-2 justify-end items-center">
+                                    <button pButton type="button" icon="pi pi-pencil" class="p-button-text p-1 hover:bg-gray-100 rounded" title="Editar"></button>
+                                    <button pButton type="button" icon="pi pi-trash" class="p-button-text p-1 hover:bg-gray-100 rounded text-red-500" title="Eliminar"></button>
+                                </div>
+                            </td>
+                        </tr>
                     </ng-template>
-                </p-cellEditor>
-            </td>
-            <td class="w-[180px]">
-                <p-cellEditor>
-                    <ng-template pTemplate="input">
-                        <p-treeSelect [options]="estados" [(ngModel)]="employee.estado" class="w-full" placeholder="Seleccionar estado"></p-treeSelect>
-                    </ng-template>
-                    <ng-template pTemplate="output">
-                        <span *ngIf="employee.estado === 'activo'" class="flex items-center gap-2 border border-green-400 text-green-600 bg-white rounded-full px-4 py-1 mr-4">
-                            <i class="pi pi-check text-green-500 text-xl"></i>
-                            <span class="font-medium">activo</span>
-                        </span>
-                        <span *ngIf="employee.estado === 'inactivo'" class="flex items-center gap-2 border border-red-400 text-red-600 bg-white rounded-full px-4 py-1 mr-4">
-                            <i class="pi pi-ban text-red-500 text-xl"></i>
-                            <span class="font-medium">inactivo</span>
-                        </span>
-                    </ng-template>
-                </p-cellEditor>
-            </td>
-            <td class="w-[320px]">
-                <p-cellEditor>
-                    <ng-template pTemplate="input">
-                        <input pInputText type="text" [(ngModel)]="employee.correo" />
-                    </ng-template>
-                    <ng-template pTemplate="output">
-                        {{employee.correo}}
-                    </ng-template>
-                </p-cellEditor>
-            </td>
-            <td class="w-[140px]">
-                <p-cellEditor>
-                    <ng-template pTemplate="input">
-                        <input pInputText type="text" [(ngModel)]="employee.puesto" />
-                    </ng-template>
-                    <ng-template pTemplate="output">
-                        {{employee.puesto}}
-                    </ng-template>
-                </p-cellEditor>
-            </td>
-            <td class="w-[40px]"></td>
-        </tr>
-    </ng-template>
-</p-table>
+                </p-table>
+        </div>
+    </div>
 
-<!-- Botón descargar -->
-<div class="flex justify-end mt-6">
-    <button pButton class="bg-[#7db3c6] text-white px-8 py-3 rounded-lg font-semibold shadow hover:bg-[#5a8fa3]">Descargar</button>
-</div>

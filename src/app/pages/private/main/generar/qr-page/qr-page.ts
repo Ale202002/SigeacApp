@@ -4,6 +4,6 @@ import { Component } from '@angular/core';
   standalone: true,
   selector: 'app-qr-page',
   imports: [],
-  templateUrl: './qr-page.component.html',
+  templateUrl: './qr-page.html',
 })
 export class QrPageComponent { }

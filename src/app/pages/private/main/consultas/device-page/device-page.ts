@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   standalone: true,
   selector: 'app-device-page',
   imports: [],
-  templateUrl: './device-page.component.html',
+  templateUrl: './device-page.html',
   
 })
 export class DevicePageComponent { }

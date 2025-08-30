@@ -4,6 +4,6 @@ import { Component } from '@angular/core';
   standalone: true,
   selector: 'app-basement-page',
   imports: [],
-  templateUrl: './basement-page.component.html',
+  templateUrl: './basement-page.html',
 })
 export class BasementPageComponent { }

@@ -1,3 +1,5 @@
+/* Fix PrimeNG p-checkbox appearance for table selection */
+
 @import "tailwindcss";
 @import 'primeicons/primeicons.css';
 
@@ -6,7 +8,23 @@ body {
 
 }
 
-/* Colores personalizados para uso directo en CSS (opcional, si no usas Tailwind para todo) */
+:host ::ng-deep .p-checkbox {
+  display: inline-flex !important;
+  vertical-align: middle !important;
+}
+:host ::ng-deep .p-checkbox-box {
+  border-radius: 0.375rem !important;
+  border-width: 2px !important;
+  border-color: #707374 !important;
+  width: 20px !important;
+  height: 20px !important;
+  background: #fff !important;
+}
+:host ::ng-deep .p-checkbox-icon {
+  font-size: 1.25rem !important;
+  color: #707374 !important;
+}
+
 :root {
   --color-primary: #064b59;
   --color-secondary: #136F7C;
@@ -14,3 +32,4 @@ body {
   --color-gray: #6C6C6C;
   --color-light: #F5F5F5;
 }
+

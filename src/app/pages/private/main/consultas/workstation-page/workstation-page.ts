@@ -4,6 +4,6 @@ import { Component } from '@angular/core';
   standalone: true,
   selector: 'app-workstation-page',
   imports: [],
-  templateUrl: './workstation-page.component.html',
+  templateUrl: './workstation-page.html',
 })
 export class WorkstationPageComponent { }

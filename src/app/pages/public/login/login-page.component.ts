@@ -33,18 +33,27 @@ import { Router } from '@angular/router';
     });
   }
 
-  //esta logica maneja el inicio de sesion
+    // Marca todos los campos del formulario como 'touched' para mostrar errores inmediatamente
+    markAllFieldsAsTouched() {
+      Object.values(this.loginForm.controls).forEach(control => {
+        control.markAsTouched();
+      });
+    }
+
+  // Esta lógica maneja el inicio de sesión
+  // Se valida el formulario y se envían los datos al backend
+  // Si la autenticación falla, se muestran los errores en los campos y el mensaje general
   login() {
     if (this.loginForm.invalid) return;
 
+    // Obtiene los valores del formulario
     const { email, contrasena } = this.loginForm.value;
-    /*console.log('Intentando login con:', { email, contrasena });*/
+    // Llama al servicio de autenticación
     this.authService.login({ email, contrasena }).subscribe({
       next: (response: any) => {
-        /*console.log('Respuesta del backend:', response);*/
+        // Si el login es exitoso, navega según el rol del usuario
         const usuario = response.usuario;
         const rol = usuario?.rol;
-        // Solo roles válidos: Administrador, RRHH, Empleado
         const routesByRole = {
           Administrador: '/dashboard',
           RRHH: '/dashboard/employee',
@@ -57,10 +66,12 @@ import { Router } from '@angular/router';
         }
         this.router.navigate([route]);
       },
-      error: (err) => {
-        /*console.log('Error en login:', err);*/
+      /*error: (err) => {
+        // Si el login falla, muestra los errores en los campos y el mensaje general
         this.error = 'Credenciales incorrectas';
-      }
+        this.markAllFieldsAsTouched();
+        this.showErrors = true;
+      }*/
     });
   }
 }

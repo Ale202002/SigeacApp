@@ -4,6 +4,6 @@ import { Component } from '@angular/core';
   standalone: true,
   selector: 'app-ground-floor-page',
   imports: [],
-  templateUrl: './ground-floor-page.component.html',
+  templateUrl: './ground-floor-page.html',
 })
 export class GroundFloorPageComponent { }
