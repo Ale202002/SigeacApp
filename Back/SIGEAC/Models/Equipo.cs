@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace SIGEAC.Models
 {
     public enum NivelCriticidad { Alta, Media, Baja }
-    public enum PropiedadAccesorio { Compania, Empleado, No }
+    public enum SistemaOperativo { Windows, Linux, MacOS }
 
     public class Equipo
     {
@@ -40,13 +40,13 @@ namespace SIGEAC.Models
         public string MAC { get; set; } = string.Empty;
 
         [Required]
-        public string Tipo { get; set; } = string.Empty;
+        public bool Tipo { get; set; } // true = Escritorio, false = Notebook
 
         [Required]
         public bool PropiedadActivo { get; set; } // true = compañía, false = empleado
 
         [Required]
-        public string SistemaOperativo { get; set; } = string.Empty;
+        public SistemaOperativo SistemaOperativo { get; set; }
 
         [Required]
         public string VersionSO { get; set; } = string.Empty;
@@ -76,28 +76,9 @@ namespace SIGEAC.Models
         public bool EscritorioRemoto { get; set; }
 
         [Required]
-        public PropiedadAccesorio Monitor { get; set; }
-
-        [Required]
-        public PropiedadAccesorio Teclado { get; set; }
-
-        [Required]
-        public PropiedadAccesorio Mouse { get; set; }
-
-        [Required]
-        public PropiedadAccesorio Auriculares { get; set; }
-
-        [Required]
-        public string Procesador { get; set; } = string.Empty;
-
-        [Required]
-        public string Disco { get; set; } = string.Empty;
-
-        [Required]
-        public string RAM { get; set; } = string.Empty;
-
-        [Required]
         public bool Cifrado { get; set; }
+
+        public string? ContrasenaCifrado { get; set; } // solo si Cifrado = true
 
         [Required]
         public bool Antivirus { get; set; }

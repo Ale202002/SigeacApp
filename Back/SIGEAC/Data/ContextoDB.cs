@@ -8,7 +8,6 @@ namespace SIGEAC.Data
         public SigeacDbContext(DbContextOptions<SigeacDbContext> options) : base(options) { }
 
         public DbSet<Usuario> Usuarios { get; set; }
-        //public DbSet<Empleado> Empleados { get; set; }
         public DbSet<Equipo> Equipos { get; set; }
         public DbSet<Puesto> Puestos { get; set; }
 
@@ -22,12 +21,8 @@ namespace SIGEAC.Data
             modelBuilder.Entity<Usuario>(entity =>
             {
                 entity.Property(u => u.Rol)
-                      .HasConversion<string>();
-                // Guarda el enum (Rol_Usuario_) como string en la base de datos
+                      .HasConversion<string>(); // enum Rol_Usuario_ como string
             });
-
-            // Empleado
-            
 
             // Equipo
             modelBuilder.Entity<Equipo>()
@@ -53,6 +48,30 @@ namespace SIGEAC.Data
                 .WithOne()
                 .HasForeignKey<Equipo>(e => e.EmpleadoAsignadoID)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Equipo>(entity =>
+            {
+                entity.Property(e => e.SistemaOperativo)
+                      .HasConversion<string>(); // enum SistemaOperativo como string
+
+                entity.Property(e => e.Confidencialidad)
+                      .HasConversion<string>();
+
+                entity.Property(e => e.Disponibilidad)
+                      .HasConversion<string>();
+
+                entity.Property(e => e.Integridad)
+                      .HasConversion<string>();
+
+                entity.Property(e => e.Criticidad)
+                      .HasConversion<string>();
+            });
+
+            // Puesto
+            modelBuilder.Entity<Puesto>()
+                .HasOne(p => p.Equipo)
+                .WithOne(e => e.Puesto)
+                .HasForeignKey<Equipo>(e => e.PuestoID);
 
             // 🔹 Usuarios iniciales (Admin y RRHH)
             modelBuilder.Entity<Usuario>().HasData(
