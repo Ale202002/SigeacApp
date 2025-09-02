@@ -19,8 +19,8 @@ namespace SIGEAC.Controllers
             _context = context;
         }
 
-        // Crear Usuario (Admin / RRHH crean Empleado)
-        [HttpPost]
+        // Crear Usuario (solo Admin / RRHH crean empleados)
+        [HttpPost("crear")]
         public async Task<IActionResult> CrearUsuario([FromBody] UsuarioCreate request)
         {
             var usuario = new Usuario
@@ -29,18 +29,17 @@ namespace SIGEAC.Controllers
                 Apellido = request.Apellido,
                 DNI = request.DNI,
                 Email = request.Email,
-                Rol = Rol_Usuario_.Empleado,   // fijo para empleados creados desde RRHH/Admin
-                Contrasena = "Temporal123"     // contraseña automática (placeholder)
+                Rol = Rol_Usuario_.Empleado,        // fijo para empleados
+                Contrasena = "Temporal123"          // contraseña automática (placeholder)
             };
 
             _context.Usuarios.Add(usuario);
             await _context.SaveChangesAsync();
 
-            return Ok("Usuario creado con éxito");
+            return Ok($"Usuario {usuario.Nombre} {usuario.Apellido} creado con éxito");
         }
 
-        // Listar solo Empleados (excluye Admin y RRHH)
-        [HttpGet]
+        [HttpGet("listar")]
         public async Task<ActionResult<IEnumerable<object>>> GetEmpleados()
         {
             var empleados = await _context.Usuarios
@@ -59,13 +58,13 @@ namespace SIGEAC.Controllers
             return Ok(empleados);
         }
 
-        // Actualizar Usuario
-        [HttpPut("{id}")]
+        // Editar Usuario
+        [HttpPut("editar/{id}")]
         public async Task<IActionResult> ActualizarUsuario(int id, [FromBody] UsuarioUpdate request)
         {
             var usuario = await _context.Usuarios.FindAsync(id);
             if (usuario == null)
-                return NotFound("Usuario no encontrado");
+                return NotFound($"Usuario {id} no encontrado");
 
             usuario.Nombre = request.Nombre;
             usuario.Apellido = request.Apellido;
@@ -75,34 +74,46 @@ namespace SIGEAC.Controllers
 
             await _context.SaveChangesAsync();
 
-            return Ok("Usuario actualizado con éxito");
+            return Ok($"Usuario {usuario.Nombre} {usuario.Apellido} actualizado con éxito");
         }
 
         // Eliminar Usuario
-        [HttpDelete("{id}")]
+        [HttpDelete("eliminar/{id}")]
         public async Task<IActionResult> EliminarUsuario(int id)
         {
             var usuario = await _context.Usuarios.FindAsync(id);
             if (usuario == null)
-                return NotFound("Usuario no encontrado");
+                return NotFound($"Usuario {id} no encontrado");
 
             _context.Usuarios.Remove(usuario);
             await _context.SaveChangesAsync();
 
-            return Ok("Usuario eliminado con éxito");
+            return Ok($"Usuario {usuario.Nombre} {usuario.Apellido} eliminado con éxito");
         }
 
-        // Login
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] UsuarioLogin request)
+        public async Task<IActionResult> Login([FromBody] UsuarioLogin loginRequest)
         {
             var usuario = await _context.Usuarios
-                .FirstOrDefaultAsync(u => u.Email == request.Email && u.Contrasena == request.Contrasena);
+                .FirstOrDefaultAsync(u => u.Email == loginRequest.Email && u.Contrasena == loginRequest.Contrasena);
 
             if (usuario == null)
-                return Unauthorized("Credenciales inválidas");
+            {
+                return Unauthorized("Credenciales incorrectas. Verifique su email y contraseña.");
+            }
 
-            return Ok("Inicio de sesión exitoso");
+            return Ok(new
+            {
+                mensaje = "Inicio de sesión exitoso",
+                usuario = new
+                {
+                    usuario.ID_Usuario,
+                    usuario.Nombre,
+                    usuario.Email,
+                    usuario.Rol
+                }
+            });
         }
     }
 }
+

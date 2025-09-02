@@ -10,6 +10,7 @@ namespace SIGEAC.Data
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Equipo> Equipos { get; set; }
         public DbSet<Puesto> Puestos { get; set; }
+        public DbSet<Componente> Componentes { get; set; } 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -51,20 +52,11 @@ namespace SIGEAC.Data
 
             modelBuilder.Entity<Equipo>(entity =>
             {
-                entity.Property(e => e.SistemaOperativo)
-                      .HasConversion<string>(); // enum SistemaOperativo como string
-
-                entity.Property(e => e.Confidencialidad)
-                      .HasConversion<string>();
-
-                entity.Property(e => e.Disponibilidad)
-                      .HasConversion<string>();
-
-                entity.Property(e => e.Integridad)
-                      .HasConversion<string>();
-
-                entity.Property(e => e.Criticidad)
-                      .HasConversion<string>();
+                entity.Property(e => e.SistemaOperativo).HasConversion<string>();
+                entity.Property(e => e.Confidencialidad).HasConversion<string>();
+                entity.Property(e => e.Disponibilidad).HasConversion<string>();
+                entity.Property(e => e.Integridad).HasConversion<string>();
+                entity.Property(e => e.Criticidad).HasConversion<string>();
             });
 
             // Puesto
@@ -73,7 +65,20 @@ namespace SIGEAC.Data
                 .WithOne(e => e.Puesto)
                 .HasForeignKey<Equipo>(e => e.PuestoID);
 
-            // 🔹 Usuarios iniciales (Admin y RRHH)
+            // 🔹 Componente
+            modelBuilder.Entity<Componente>(entity =>
+            {
+                entity.Property(c => c.Tipo).HasConversion<string>();   // enum TipoComponente como string
+                entity.Property(c => c.Estado).HasConversion<string>(); // enum EstadoComponente como string
+
+                // Relación Componente ↔ Equipo (opcional)
+                //entity.HasOne(c => c.Equipo)
+                      //.WithMany(e => e.Componentes)
+                      //.HasForeignKey(c => c.EquipoID)
+                      //.OnDelete(DeleteBehavior.SetNull); // si se elimina un equipo, el componente queda sin asignar
+            });
+
+            // Usuarios iniciales (Admin y RRHH)
             modelBuilder.Entity<Usuario>().HasData(
                 new Usuario
                 {
@@ -82,7 +87,7 @@ namespace SIGEAC.Data
                     Apellido = "Principal",
                     DNI = "00000001",
                     Email = "admin@sigeac.com",
-                    Contrasena = "Admin123", // ⚠️ en producción debería ir hasheada
+                    Contrasena = "Admin123", // en producción debería ir hasheada
                     Rol = Rol_Usuario_.Administrador
                 },
                 new Usuario
@@ -92,10 +97,11 @@ namespace SIGEAC.Data
                     Apellido = "Principal",
                     DNI = "00000002",
                     Email = "rrhh@sigeac.com",
-                    Contrasena = "RRHH123", // ⚠️ igual, hasheado en sistemas reales
+                    Contrasena = "RRHH123", // igual, hasheado en sistemas reales
                     Rol = Rol_Usuario_.RRHH
                 }
             );
         }
     }
 }
+

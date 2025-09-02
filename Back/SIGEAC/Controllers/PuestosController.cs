@@ -68,20 +68,6 @@ namespace SIGEAC.Controllers
             return Ok(puestos);
         }
 
-        [HttpGet("buscar/{id}")]
-        public async Task<IActionResult> Buscar(int id)
-        {
-            var puesto = await _context.Puestos
-                .Include(p => p.Empleado)
-                .Include(p => p.Equipo)
-                .FirstOrDefaultAsync(p => p.ID_Puesto == id);
-
-            if (puesto == null)
-                return NotFound("Puesto no encontrado.");
-
-            return Ok(puesto);
-        }
-
         [HttpDelete("eliminar/{id}")]
         public async Task<IActionResult> Eliminar(int id)
         {
