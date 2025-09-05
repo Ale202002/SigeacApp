@@ -29,7 +29,6 @@ namespace SIGEAC.Controllers
                 Ubicacion = request.Ubicacion,
                 Estado = request.Estado,
                 UsuarioID = request.UsuarioID,
-                EquipoID = request.EquipoID
             };
 
             _context.Puestos.Add(nuevoPuesto);
@@ -51,7 +50,6 @@ namespace SIGEAC.Controllers
             puesto.Ubicacion = request.Ubicacion;
             puesto.Estado = request.Estado;
             puesto.UsuarioID = request.UsuarioID;
-            puesto.EquipoID = request.EquipoID;
 
             await _context.SaveChangesAsync();
             return Ok("Puesto editado correctamente.");

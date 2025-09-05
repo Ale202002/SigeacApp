@@ -115,26 +115,13 @@ namespace SIGEAC.Controllers
                 .Include(e => e.Puesto)
                 .Include(e => e.EmpleadoAsignado)
                 .Include(e => e.UsuariosAutorizados)
+                .Include(e => e.Componentes)
                 .ToListAsync();
 
             return Ok(equipos);
         }
 
-        [HttpGet("buscar/{id}")]
-        public async Task<IActionResult> Buscar(int id)
-        {
-            var equipo = await _context.Equipos
-                .Include(e => e.Puesto)
-                .Include(e => e.EmpleadoAsignado)
-                .Include(e => e.UsuariosAutorizados)
-                .FirstOrDefaultAsync(e => e.ID_Equipo == id);
-
-            if (equipo == null)
-                return NotFound("Equipo no encontrado.");
-
-            return Ok(equipo);
-        }
-
+      
         [HttpDelete("eliminar/{id}")]
         public async Task<IActionResult> Eliminar(int id)
         {
@@ -147,5 +134,32 @@ namespace SIGEAC.Controllers
 
             return Ok("Equipo eliminado correctamente.");
         }
+
+        [HttpPost("asignar-componente")]
+        public async Task<IActionResult> AsignarComponente(int equipoId, int componenteId)
+        {
+            var equipo = await _context.Equipos
+                .Include(e => e.Componentes)
+                .FirstOrDefaultAsync(e => e.ID_Equipo == equipoId);
+
+            if (equipo == null)
+                return NotFound($"Equipo {equipoId} no encontrado.");
+
+            var componente = await _context.Componentes.FindAsync(componenteId);
+            if (componente == null)
+                return NotFound($"Componente {componenteId} no encontrado.");
+
+            if (componente.EquipoID != null)
+                return BadRequest("Este componente ya está asignado a otro equipo.");
+
+            // Asignar
+            componente.EquipoID = equipoId;
+            equipo.Componentes.Add(componente);
+
+            await _context.SaveChangesAsync();
+
+            return Ok($"Componente {componente.Nombre} asignado al equipo {equipo.IdentificadorActivo}");
+        }
+
     }
 }

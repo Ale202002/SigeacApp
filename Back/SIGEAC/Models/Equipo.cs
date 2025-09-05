@@ -87,5 +87,9 @@ namespace SIGEAC.Models
 
         // Relación con Usuarios Autorizados (muchos a muchos)
         public List<Usuario> UsuariosAutorizados { get; set; } = new List<Usuario>();
+
+        // Relación con Componentes (uno a muchos)
+        public ICollection<Componente> Componentes { get; set; } = new List<Componente>();
+
     }
 }

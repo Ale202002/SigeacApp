@@ -2,7 +2,7 @@
 
 namespace SIGEAC.Models
 {
-    public class ComponenteUpdate
+    public class ComponenteCreate
     {
         [Required]
         public string Nombre { get; set; }
@@ -13,8 +13,6 @@ namespace SIGEAC.Models
         [Required]
         public EstadoComponente Estado { get; set; }
 
-        // Si queremos permitir actualizar el equipo asignado:
-        public int? EquipoID { get; set; }
     }
 }
 

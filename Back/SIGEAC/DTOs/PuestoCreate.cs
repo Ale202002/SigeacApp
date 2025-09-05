@@ -2,11 +2,8 @@
 
 namespace SIGEAC.Models
 {
-    public class PuestoUpdate
+    public class PuestoCreate
     {
-        [Required]
-        public int ID_Puesto { get; set; }
-
         [Required]
         public required string Ubicacion { get; set; }
 
@@ -15,7 +12,5 @@ namespace SIGEAC.Models
 
         public int? UsuarioID { get; set; }
 
-        public int? EquipoID { get; set; }
     }
 }
-

@@ -79,7 +79,7 @@ namespace SIGEAC.Data
             });
 
             // Usuarios iniciales (Admin y RRHH)
-            modelBuilder.Entity<Usuario>().HasData(
+            modelBuilder.Entity<Usuario>().HasData (
                 new Usuario
                 {
                     ID_Usuario = 1,
@@ -101,6 +101,14 @@ namespace SIGEAC.Data
                     Rol = Rol_Usuario_.RRHH
                 }
             );
+
+            // Relación Equipo - Componente (1 a muchos)
+            modelBuilder.Entity<Equipo>()
+                .HasMany(e => e.Componentes)
+                .WithOne(c => c.Equipo)
+                .HasForeignKey(c => c.EquipoID)
+                .OnDelete(DeleteBehavior.SetNull); // si se elimina un equipo, los componentes quedan libres
+
         }
     }
 }
