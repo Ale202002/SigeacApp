@@ -57,7 +57,6 @@ namespace SIGEAC.Controllers
             componente.Nombre = request.Nombre;
             componente.Tipo = request.Tipo;
             componente.Estado = request.Estado;
-            componente.EquipoID = request.EquipoID; // permite asignar/desasignar equipo
 
             await _context.SaveChangesAsync();
 
