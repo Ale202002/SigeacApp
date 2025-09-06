@@ -5,9 +5,6 @@ namespace SIGEAC.Models
     public class PuestoUpdate
     {
         [Required]
-        public int ID_Puesto { get; set; }
-
-        [Required]
         public required string Ubicacion { get; set; }
 
         [Required]
