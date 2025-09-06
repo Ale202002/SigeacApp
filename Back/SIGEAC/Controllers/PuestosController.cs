@@ -40,9 +40,6 @@ namespace SIGEAC.Controllers
         [HttpPut("editar/{id}")]
         public async Task<IActionResult> Editar(int id, [FromBody] PuestoUpdate request)
         {
-            if (id != request.ID_Puesto)
-                return BadRequest("El ID del puesto no coincide.");
-
             var puesto = await _context.Puestos.FindAsync(id);
             if (puesto == null)
                 return NotFound("Puesto no encontrado.");
