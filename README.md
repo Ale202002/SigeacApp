@@ -57,3 +57,23 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+## Path aliases
+
+This project defines TypeScript path aliases in `tsconfig.json` to simplify imports and avoid long relative paths.
+
+- `@core/*` -> `src/app/core/*`
+- `@pages/*` -> `src/app/pages/*`
+- `@app/*`   -> `src/app/*`
+
+Examples:
+
+```ts
+// before
+import { UserService } from '../../../../core/services/user.service';
+
+// after
+import { UserService } from '@core/services/user.service';
+```
+
+If you add or rename aliases, restart the TypeScript server or your editor/IDE and rebuild the app so the new paths are recognized.

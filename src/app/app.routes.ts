@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from './core/guards/auth.guard';
 import { RoleGuard } from './core/guards/role.guard';
-import { RoleUser } from './core/models/enums/role-user.enum';
+import { RoleUser } from './core/enums/user-enums/role-user.enum';
 
 //esta es la raiz de las routes de la aplicacion en donde los usuarios son redirigidos segun su rol
 // y se comportan mediante los guards.

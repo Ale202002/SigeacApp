@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, Router } from '@angular/router';
-import { AuthService } from '../services/auth.service';
-import { RoleUser } from '../models/enums/role-user.enum';
+import { AuthService } from '@core/services/auth.service';
+import { RoleUser } from '@core/enums/user-enums/role-user.enum';
 
 @Injectable({
   providedIn: 'root'

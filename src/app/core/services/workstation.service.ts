@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { WorkStation, WorkStationCreate, WorkStationUpdate } from '../models/WorkStation.model';
+import { WorkStation, WorkStationCreate, WorkStationUpdate } from '@core/interfaces/workstation.interface';
 
 @Injectable({
   providedIn: 'root'

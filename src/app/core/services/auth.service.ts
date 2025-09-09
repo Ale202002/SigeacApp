@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { UserLogin, User } from '../models/User.model';
+import { User, UserLogin } from '@core/interfaces/user.interface';
+
 
 // Definimos el tipo exacto del usuario que devuelve el backend
 

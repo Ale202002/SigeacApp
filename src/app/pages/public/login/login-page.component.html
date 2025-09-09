@@ -30,21 +30,31 @@
         @if (loginForm.get('email')?.invalid && showErrors) {
           <div class="text-[#F51A1A] text-sm">Correo electrónico no es correcto</div>
         }
-      </div>
-      <div class="w-full mb-4">
+        </div>
+            <div class="w-full mb-4">
         <label
           class="block font-medium mb-2 text-[#064b59]"
           for="contrasena"
           [class.text-accent]="loginForm.get('contrasena')?.invalid && showErrors"
         >Contraseña</label>
-        <input
-          id="contrasena"
-          type="password"
-          formControlName="contrasena"
-          placeholder="Contraseña"
-          class="w-full px-4 py-2 border border-[#136F7C] rounded focus:outline-none focus:ring-2 focus:ring-[#064b59] text-primary bg-light font-medium placeholder-opacity-50 placeholder-[#6C6C6C]"
-          [class.border-accent]="loginForm.get('contrasena')?.invalid && showErrors"
-        />
+        <div class="relative">
+          <input
+            id="contrasena"
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="contrasena"
+            placeholder="Contraseña"
+            class="w-full px-4 py-2 border border-[#136F7C] rounded focus:outline-none focus:ring-2 focus:ring-[#064b59] text-primary bg-light font-medium placeholder-opacity-50 placeholder-[#6C6C6C]"
+            [class.border-accent]="loginForm.get('contrasena')?.invalid && showErrors"
+          />
+          <button
+            type="button"
+            class="absolute right-3 top-1/2 -translate-y-1/2 text-[#064b59] focus:outline-none"
+            (click)="showPassword = !showPassword"
+            tabindex="-1"
+          >
+            <i [ngClass]="showPassword ? 'pi pi-eye-slash' : 'pi pi-eye'"></i>
+          </button>
+        </div>
         @if (loginForm.get('contrasena')?.invalid && showErrors) {
           <div class="text-[#F51A1A] text-sm">La contraseña ingresada no es correcta</div>
         }

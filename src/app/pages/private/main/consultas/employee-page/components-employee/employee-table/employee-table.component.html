@@ -4,12 +4,12 @@
 <div class="flex gap-8 mb-12 justify-center mt-8">
     <div class="flex items-center" style="width:246px; height:48px;">
         <span class="w-full relative">
-            <p-treeSelect [options]="plantas" [(ngModel)]="selectedPlanta" placeholder="Planta" class="w-full border rounded-lg px-4 py-3 focus:outline-none align-middle" style="width:246px; height:48px; line-height:32px; border-radius:0.5rem; border-color:#6C6C6C; border-width:2px; color:#555555AD;" ></p-treeSelect>
+            <p-treeSelect [options]="plantas" [(ngModel)]="selectedPlanta" appendTo="body" placeholder="Plantas" class="w-full border rounded-lg px-4 py-3 focus:outline-none align-middle" style="width:246px; height:48px; line-height:32px; border-radius:0.5rem; border-color:#6C6C6C; border-width:2px; color:#555555AD;" ></p-treeSelect>
         </span>
     </div>
     <div class="flex items-center" style="width:246px; height:48px;">
         <span class="w-full relative">
-            <p-treeSelect [options]="estados" [(ngModel)]="selectedEstado" placeholder="Estado" class="w-full border rounded-lg px-4 py-3 focus:outline-none align-middle" style="width:246px; height:48px; line-height:32px; border-radius:0.5rem; border-color:#6C6C6C; border-width:2px; color:#555555AD;" ></p-treeSelect>
+            <p-treeSelect [options]="estados" [(ngModel)]="selectedEstado" appendTo="body" placeholder="Estados" class="w-full border rounded-lg px-4 py-3 focus:outline-none align-middle" style="width:246px; height:48px; line-height:32px; border-radius:0.5rem; border-color:#6C6C6C; border-width:2px; color:#555555AD;" ></p-treeSelect>
         </span>
     </div>
     <div class="flex-1 max-w-xs flex items-center">
@@ -48,7 +48,7 @@
                             <td class="w-[220px]">
                                 <div class="flex items-center gap-2">
                                     <i class="pi pi-user text-xl text-gray-600"></i>
-                                    <span class="text-gray-900 text-base">{{employee.nombre}}</span>
+                                    <span class="text-gray-900 text-base">{{employee.nombre}} {{employee.apellido}}</span>
                                 </div>
                             </td>
                             <td class="w-[180px]">
@@ -57,7 +57,7 @@
                                     <span class="font-medium">{{employee.estado}}</span>
                                 </span>
                             </td>
-                            <td class="w-[320px]">{{employee.correo}}</td>
+                            <td class="w-[320px]">{{employee.email}}</td>
                             <td class="w-[140px]">{{employee.puesto}}</td>
                             <td class="w-[40px]">
                                 <div class="flex gap-2 justify-end items-center">

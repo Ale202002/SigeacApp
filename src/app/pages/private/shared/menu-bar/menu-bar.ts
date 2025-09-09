@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
-import { AuthService } from '../../../../core/services/auth.service';
+import { AuthService } from '@core/services/auth.service';
 import { Router, RouterLink } from '@angular/router';
-import { RoleUser } from '../../../../core/models/enums/role-user.enum';
+import { RoleUser } from '@core/enums/user-enums/role-user.enum';
 
 @Component({
   standalone: true,
