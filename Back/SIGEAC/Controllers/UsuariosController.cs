@@ -36,8 +36,15 @@ namespace SIGEAC.Controllers
             _context.Usuarios.Add(usuario);
             await _context.SaveChangesAsync();
 
-            return Ok($"Usuario {usuario.Nombre} {usuario.Apellido} creado con éxito");
+            return Ok(new
+            {
+                usuario.Nombre,
+                usuario.Apellido,
+                usuario.DNI,
+                usuario.Email
+            });
         }
+
 
         [HttpGet("listar")]
         public async Task<ActionResult<IEnumerable<object>>> GetEmpleados()
