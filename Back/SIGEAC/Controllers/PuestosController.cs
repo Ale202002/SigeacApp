@@ -18,6 +18,7 @@ namespace SIGEAC.Controllers
             _context = context;
         }
 
+        // Crear Puesto
         [HttpPost("crear")]
         public async Task<IActionResult> Crear([FromBody] PuestoCreate request)
         {
@@ -34,9 +35,20 @@ namespace SIGEAC.Controllers
             _context.Puestos.Add(nuevoPuesto);
             await _context.SaveChangesAsync();
 
-            return Ok("Puesto creado exitosamente.");
+            return Ok(new
+            {
+                mensaje = "Puesto creado exitosamente",
+                puesto = new
+                {
+                    nuevoPuesto.ID_Puesto,
+                    nuevoPuesto.Ubicacion,
+                    nuevoPuesto.Estado,
+                    nuevoPuesto.UsuarioID
+                }
+            });
         }
 
+        // Editar Puesto
         [HttpPut("editar/{id}")]
         public async Task<IActionResult> Editar(int id, [FromBody] PuestoUpdate request)
         {
@@ -49,7 +61,18 @@ namespace SIGEAC.Controllers
             puesto.UsuarioID = request.UsuarioID;
 
             await _context.SaveChangesAsync();
-            return Ok("Puesto editado correctamente.");
+
+            return Ok(new
+            {
+                mensaje = "Puesto editado correctamente",
+                puesto = new
+                {
+                    puesto.ID_Puesto,
+                    puesto.Ubicacion,
+                    puesto.Estado,
+                    puesto.UsuarioID
+                }
+            });
         }
 
         [HttpGet("listar")]
@@ -63,6 +86,7 @@ namespace SIGEAC.Controllers
             return Ok(puestos);
         }
 
+        // Eliminar Puesto
         [HttpDelete("eliminar/{id}")]
         public async Task<IActionResult> Eliminar(int id)
         {
@@ -73,7 +97,17 @@ namespace SIGEAC.Controllers
             _context.Puestos.Remove(puesto);
             await _context.SaveChangesAsync();
 
-            return Ok("Puesto eliminado correctamente.");
+            return Ok(new
+            {
+                mensaje = "Puesto eliminado con éxito",
+                puesto = new
+                {
+                    puesto.ID_Puesto,
+                    puesto.Ubicacion,
+                    puesto.Estado,
+                    puesto.UsuarioID
+                }
+            });
         }
     }
 }

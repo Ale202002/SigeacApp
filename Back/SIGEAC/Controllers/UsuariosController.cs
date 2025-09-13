@@ -38,10 +38,15 @@ namespace SIGEAC.Controllers
 
             return Ok(new
             {
-                usuario.Nombre,
-                usuario.Apellido,
-                usuario.DNI,
-                usuario.Email
+                mensaje = "Usuario creado con éxito",
+                usuario = new
+                {
+                    usuario.ID_Usuario,
+                    usuario.Nombre,
+                    usuario.Apellido,
+                    usuario.DNI,
+                    usuario.Email
+                }
             });
         }
 
@@ -81,7 +86,18 @@ namespace SIGEAC.Controllers
 
             await _context.SaveChangesAsync();
 
-            return Ok($"Usuario {usuario.Nombre} {usuario.Apellido} actualizado con éxito");
+            return Ok(new
+            {
+                mensaje = "Usuario actualizado con éxito",
+                usuario = new
+                {
+                    usuario.ID_Usuario,
+                    usuario.Nombre,
+                    usuario.Apellido,
+                    usuario.DNI,
+                    usuario.Email
+                }
+            });
         }
 
         // Eliminar Usuario
@@ -95,8 +111,20 @@ namespace SIGEAC.Controllers
             _context.Usuarios.Remove(usuario);
             await _context.SaveChangesAsync();
 
-            return Ok($"Usuario {usuario.Nombre} {usuario.Apellido} eliminado con éxito");
+            return Ok(new
+            {
+                mensaje = "Usuario eliminado con éxito",
+                usuario = new
+                {
+                    usuario.ID_Usuario,
+                    usuario.Nombre,
+                    usuario.Apellido,
+                    usuario.DNI,
+                    usuario.Email
+                }
+            });
         }
+
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] UsuarioLogin loginRequest)

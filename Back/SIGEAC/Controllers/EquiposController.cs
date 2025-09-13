@@ -16,6 +16,7 @@ namespace SIGEAC.Controllers
             _context = context;
         }
 
+        // Crear Equipo
         [HttpPost("crear")]
         public async Task<IActionResult> Crear([FromBody] EquipoCreate request)
         {
@@ -56,9 +57,24 @@ namespace SIGEAC.Controllers
             _context.Equipos.Add(equipo);
             await _context.SaveChangesAsync();
 
-            return Ok("Equipo creado exitosamente.");
+            return Ok(new
+            {
+                mensaje = "Equipo creado exitosamente",
+                equipo = new
+                {
+                    equipo.ID_Equipo,
+                    equipo.IdentificadorActivo,
+                    equipo.Area,
+                    equipo.IP,
+                    equipo.NumeroSerie,
+                    equipo.MAC,
+                    equipo.SistemaOperativo,
+                    equipo.VersionSO
+                }
+            });
         }
 
+        // Editar Equipo
         [HttpPut("editar/{id}")]
         public async Task<IActionResult> Editar(int id, [FromBody] EquipoUpdate request)
         {
@@ -105,8 +121,24 @@ namespace SIGEAC.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return Ok("Equipo editado correctamente.");
+
+            return Ok(new
+            {
+                mensaje = "Equipo editado correctamente",
+                equipo = new
+                {
+                    equipo.ID_Equipo,
+                    equipo.IdentificadorActivo,
+                    equipo.Area,
+                    equipo.IP,
+                    equipo.NumeroSerie,
+                    equipo.MAC,
+                    equipo.SistemaOperativo,
+                    equipo.VersionSO
+                }
+            });
         }
+
 
         [HttpGet("listar")]
         public async Task<IActionResult> Listar()
@@ -116,12 +148,14 @@ namespace SIGEAC.Controllers
                 .Include(e => e.EmpleadoAsignado)
                 .Include(e => e.UsuariosAutorizados)
                 .Include(e => e.Componentes)
+                .Include(e => e.Perifericos)
                 .ToListAsync();
 
             return Ok(equipos);
         }
 
-      
+
+        // Eliminar Equipo
         [HttpDelete("eliminar/{id}")]
         public async Task<IActionResult> Eliminar(int id)
         {
@@ -132,7 +166,21 @@ namespace SIGEAC.Controllers
             _context.Equipos.Remove(equipo);
             await _context.SaveChangesAsync();
 
-            return Ok("Equipo eliminado correctamente.");
+            return Ok(new
+            {
+                mensaje = "Equipo eliminado con éxito",
+                equipo = new
+                {
+                    equipo.ID_Equipo,
+                    equipo.IdentificadorActivo,
+                    equipo.Area,
+                    equipo.IP,
+                    equipo.NumeroSerie,
+                    equipo.MAC,
+                    equipo.SistemaOperativo,
+                    equipo.VersionSO
+                }
+            });
         }
 
         [HttpPost("asignar-componente")]
@@ -152,14 +200,155 @@ namespace SIGEAC.Controllers
             if (componente.EquipoID != null)
                 return BadRequest("Este componente ya está asignado a otro equipo.");
 
-            // Asignar
+            // Asignar 
             componente.EquipoID = equipoId;
             equipo.Componentes.Add(componente);
 
             await _context.SaveChangesAsync();
 
-            return Ok($"Componente {componente.Nombre} asignado al equipo {equipo.IdentificadorActivo}");
+            return Ok(new
+            {
+                mensaje = $"Componente asignado correctamente",
+                equipo = new
+                {
+                    equipo.ID_Equipo,
+                    equipo.IdentificadorActivo,
+                    equipo.Area,
+                    equipo.IP
+                },
+                componente = new
+                {
+                    componente.ID_Componente,
+                    componente.Nombre,
+                    componente.Tipo,
+                    componente.Estado
+                }
+            });
         }
+
+        // Desasignar Componente de un Equipo
+        [HttpPost("desasignar-componente")]
+        public async Task<IActionResult> DesasignarComponente(int equipoId, int componenteId)
+        {
+            var equipo = await _context.Equipos
+                .Include(e => e.Componentes)
+                .FirstOrDefaultAsync(e => e.ID_Equipo == equipoId);
+
+            if (equipo == null)
+                return NotFound($"Equipo {equipoId} no encontrado.");
+
+            var componente = equipo.Componentes.FirstOrDefault(c => c.ID_Componente == componenteId);
+            if (componente == null)
+                return NotFound($"El componente {componenteId} no está asignado a este equipo.");
+
+            // Quitar asignación
+            componente.EquipoID = null;
+            equipo.Componentes.Remove(componente);
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new
+            {
+                mensaje = "Componente desasignado con éxito",
+                componente = new
+                {
+                    componente.ID_Componente,
+                    componente.Nombre,
+                    componente.Tipo,
+                    componente.Estado
+                },
+                equipo = new
+                {
+                    equipo.ID_Equipo,
+                    equipo.IdentificadorActivo
+                }
+            });
+        }
+
+
+        // Asignar Periférico a un Equipo
+        [HttpPost("asignar-periferico")]
+        public async Task<IActionResult> AsignarPeriferico(int equipoId, int perifericoId)
+        {
+            var equipo = await _context.Equipos
+                .Include(e => e.Perifericos)
+                .FirstOrDefaultAsync(e => e.ID_Equipo == equipoId);
+
+            if (equipo == null)
+                return NotFound($"Equipo {equipoId} no encontrado.");
+
+            var periferico = await _context.Perifericos.FindAsync(perifericoId);
+            if (periferico == null)
+                return NotFound($"Periférico {perifericoId} no encontrado.");
+
+            if (periferico.EquipoID != null)
+                return BadRequest("Este periférico ya está asignado a otro equipo.");
+
+            // Asignar
+            periferico.EquipoID = equipoId;
+            equipo.Perifericos.Add(periferico);
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new
+            {
+                mensaje = "Periférico asignado correctamente",
+                equipo = new
+                {
+                    equipo.ID_Equipo,
+                    equipo.IdentificadorActivo,
+                    equipo.Area,
+                    equipo.IP
+                },
+                periferico = new
+                {
+                    periferico.ID_Periferico,
+                    periferico.Nombre,
+                    periferico.Tipo,
+                    periferico.Estado
+                }
+            });
+        }
+
+        // Desasignar Periférico de un Equipo
+        [HttpPost("desasignar-periferico")]
+        public async Task<IActionResult> DesasignarPeriferico(int equipoId, int perifericoId)
+        {
+            var equipo = await _context.Equipos
+                .Include(e => e.Perifericos)
+                .FirstOrDefaultAsync(e => e.ID_Equipo == equipoId);
+
+            if (equipo == null)
+                return NotFound($"Equipo {equipoId} no encontrado.");
+
+            var periferico = equipo.Perifericos.FirstOrDefault(p => p.ID_Periferico == perifericoId);
+            if (periferico == null)
+                return NotFound($"El periférico {perifericoId} no está asignado a este equipo.");
+
+            // Quitar asignación
+            periferico.EquipoID = null;
+            equipo.Perifericos.Remove(periferico);
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new
+            {
+                mensaje = "Periférico desasignado con éxito",
+                periferico = new
+                {
+                    periferico.ID_Periferico,
+                    periferico.Nombre,
+                    periferico.Tipo,
+                    periferico.Estado
+                },
+                equipo = new
+                {
+                    equipo.ID_Equipo,
+                    equipo.IdentificadorActivo
+                }
+            });
+        }
+
 
     }
 }

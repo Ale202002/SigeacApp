@@ -32,18 +32,17 @@ namespace SIGEAC.Controllers
             _context.Componentes.Add(componente);
             await _context.SaveChangesAsync();
 
-            return Ok($"Componente {componente.Nombre} creado con éxito (ID: {componente.ID_Componente})");
-        }
-
-        // Listar Componentes
-        [HttpGet("listar")]
-        public async Task<ActionResult<IEnumerable<Componente>>> ListarComponentes()
-        {
-            var componentes = await _context.Componentes
-                .Include(c => c.Equipo) // muestra el equipo asignado (si lo tiene)
-                .ToListAsync();
-
-            return Ok(componentes);
+            return Ok(new
+            {
+                mensaje = "Componente creado con éxito",
+                componente = new
+                {
+                    componente.ID_Componente,
+                    componente.Nombre,
+                    componente.Tipo,
+                    componente.Estado
+                }
+            });
         }
 
         // Editar Componente
@@ -60,10 +59,31 @@ namespace SIGEAC.Controllers
 
             await _context.SaveChangesAsync();
 
-            return Ok($"Componente {componente.Nombre} actualizado con éxito");
+            return Ok(new
+            {
+                mensaje = "Componente actualizado con éxito",
+                componente = new
+                {
+                    componente.ID_Componente,
+                    componente.Nombre,
+                    componente.Tipo,
+                    componente.Estado
+                }
+            });
         }
 
-        //  Eliminar Componente
+        // Listar Componentes
+        [HttpGet("listar")]
+        public async Task<ActionResult<IEnumerable<Componente>>> ListarComponentes()
+        {
+            var componentes = await _context.Componentes
+                .Include(c => c.Equipo) // muestra el equipo asignado (si lo tiene)
+                .ToListAsync();
+
+            return Ok(componentes);
+        }
+
+        // Eliminar Componente
         [HttpDelete("eliminar/{id}")]
         public async Task<IActionResult> EliminarComponente(int id)
         {
@@ -74,7 +94,17 @@ namespace SIGEAC.Controllers
             _context.Componentes.Remove(componente);
             await _context.SaveChangesAsync();
 
-            return Ok($"Componente {componente.Nombre} eliminado con éxito");
+            return Ok(new
+            {
+                mensaje = "Componente eliminado con éxito",
+                componente = new
+                {
+                    componente.ID_Componente,
+                    componente.Nombre,
+                    componente.Tipo,
+                    componente.Estado
+                }
+            });
         }
     }
 }

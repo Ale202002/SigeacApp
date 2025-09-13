@@ -10,7 +10,8 @@ namespace SIGEAC.Data
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Equipo> Equipos { get; set; }
         public DbSet<Puesto> Puestos { get; set; }
-        public DbSet<Componente> Componentes { get; set; } 
+        public DbSet<Componente> Componentes { get; set; }
+        public DbSet<Periferico> Perifericos { get; set; }  
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -70,16 +71,17 @@ namespace SIGEAC.Data
             {
                 entity.Property(c => c.Tipo).HasConversion<string>();   // enum TipoComponente como string
                 entity.Property(c => c.Estado).HasConversion<string>(); // enum EstadoComponente como string
+            });
 
-                // Relación Componente ↔ Equipo (opcional)
-                //entity.HasOne(c => c.Equipo)
-                      //.WithMany(e => e.Componentes)
-                      //.HasForeignKey(c => c.EquipoID)
-                      //.OnDelete(DeleteBehavior.SetNull); // si se elimina un equipo, el componente queda sin asignar
+            // 🔹 Periférico
+            modelBuilder.Entity<Periferico>(entity =>
+            {
+                entity.Property(p => p.Tipo).HasConversion<string>();   // enum TipoPeriferico como string
+                entity.Property(p => p.Estado).HasConversion<string>(); // enum EstadoPeriferico como string
             });
 
             // Usuarios iniciales (Admin y RRHH)
-            modelBuilder.Entity<Usuario>().HasData (
+            modelBuilder.Entity<Usuario>().HasData(
                 new Usuario
                 {
                     ID_Usuario = 1,
@@ -107,8 +109,14 @@ namespace SIGEAC.Data
                 .HasMany(e => e.Componentes)
                 .WithOne(c => c.Equipo)
                 .HasForeignKey(c => c.EquipoID)
-                .OnDelete(DeleteBehavior.SetNull); // si se elimina un equipo, los componentes quedan libres
+                .OnDelete(DeleteBehavior.SetNull);
 
+            // Relación Equipo - Periférico (1 a muchos)
+            modelBuilder.Entity<Equipo>()
+                .HasMany(e => e.Perifericos)
+                .WithOne(p => p.Equipo)
+                .HasForeignKey(p => p.EquipoID)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

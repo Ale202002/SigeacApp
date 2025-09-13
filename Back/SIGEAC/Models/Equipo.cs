@@ -91,5 +91,8 @@ namespace SIGEAC.Models
         // Relación con Componentes (uno a muchos)
         public ICollection<Componente> Componentes { get; set; } = new List<Componente>();
 
+        // Relación con Periféricos (uno a muchos)
+        public ICollection<Periferico> Perifericos { get; set; } = new List<Periferico>();
+
     }
 }
