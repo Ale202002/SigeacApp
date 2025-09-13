@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using SIGEAC.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace SIGEAC.Models
 {

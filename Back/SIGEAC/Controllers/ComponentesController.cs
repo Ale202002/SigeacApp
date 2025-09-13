@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using SIGEAC.Data;
+using SIGEAC.DTOs;
 using SIGEAC.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using SIGEAC.Services.Interfaces;
 
 namespace SIGEAC.Controllers
 {
@@ -11,26 +9,17 @@ namespace SIGEAC.Controllers
     [Route("api/[controller]")]
     public class ComponenteController : ControllerBase
     {
-        private readonly SigeacDbContext _context;
+        private readonly IComponenteService _componenteService;
 
-        public ComponenteController(SigeacDbContext context)
+        public ComponenteController(IComponenteService componenteService)
         {
-            _context = context;
+            _componenteService = componenteService;
         }
 
-        // Crear Componente
         [HttpPost("crear")]
         public async Task<IActionResult> CrearComponente([FromBody] ComponenteCreate request)
         {
-            var componente = new Componente
-            {
-                Nombre = request.Nombre,
-                Tipo = request.Tipo,
-                Estado = request.Estado
-            };
-
-            _context.Componentes.Add(componente);
-            await _context.SaveChangesAsync();
+            var componente = await _componenteService.CrearComponente(request);
 
             return Ok(new
             {
@@ -45,19 +34,11 @@ namespace SIGEAC.Controllers
             });
         }
 
-        // Editar Componente
         [HttpPut("editar/{id}")]
         public async Task<IActionResult> EditarComponente(int id, [FromBody] ComponenteUpdate request)
         {
-            var componente = await _context.Componentes.FindAsync(id);
-            if (componente == null)
-                return NotFound($"Componente con ID {id} no encontrado");
-
-            componente.Nombre = request.Nombre;
-            componente.Tipo = request.Tipo;
-            componente.Estado = request.Estado;
-
-            await _context.SaveChangesAsync();
+            var componente = await _componenteService.EditarComponente(id, request);
+            if (componente == null) return NotFound($"Componente con ID {id} no encontrado");
 
             return Ok(new
             {
@@ -72,27 +53,18 @@ namespace SIGEAC.Controllers
             });
         }
 
-        // Listar Componentes
         [HttpGet("listar")]
-        public async Task<ActionResult<IEnumerable<Componente>>> ListarComponentes()
+        public async Task<IActionResult> ListarComponentes()
         {
-            var componentes = await _context.Componentes
-                .Include(c => c.Equipo) // muestra el equipo asignado (si lo tiene)
-                .ToListAsync();
-
+            var componentes = await _componenteService.ListarComponentes();
             return Ok(componentes);
         }
 
-        // Eliminar Componente
         [HttpDelete("eliminar/{id}")]
         public async Task<IActionResult> EliminarComponente(int id)
         {
-            var componente = await _context.Componentes.FindAsync(id);
-            if (componente == null)
-                return NotFound($"Componente con ID {id} no encontrado");
-
-            _context.Componentes.Remove(componente);
-            await _context.SaveChangesAsync();
+            var componente = await _componenteService.EliminarComponente(id);
+            if (componente == null) return NotFound($"Componente con ID {id} no encontrado");
 
             return Ok(new
             {
@@ -108,4 +80,3 @@ namespace SIGEAC.Controllers
         }
     }
 }
-

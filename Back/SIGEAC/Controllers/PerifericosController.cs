@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using SIGEAC.Data;
 using SIGEAC.DTOs;
 using SIGEAC.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using SIGEAC.Services.Interfaces;
 
 namespace SIGEAC.Controllers
 {
@@ -12,17 +9,19 @@ namespace SIGEAC.Controllers
     [Route("api/[controller]")]
     public class PerifericoController : ControllerBase
     {
-        private readonly SigeacDbContext _context;
+        private readonly IPerifericoService _perifericoService;
 
-        public PerifericoController(SigeacDbContext context)
+        public PerifericoController(IPerifericoService perifericoService)
         {
-            _context = context;
+            _perifericoService = perifericoService;
         }
 
-        // Crear Periférico
         [HttpPost("crear")]
         public async Task<IActionResult> CrearPeriferico([FromBody] PerifericoCreate request)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var periferico = new Periferico
             {
                 Nombre = request.Nombre,
@@ -30,83 +29,50 @@ namespace SIGEAC.Controllers
                 Estado = request.Estado
             };
 
-            _context.Perifericos.Add(periferico);
-            await _context.SaveChangesAsync();
+            var creado = await _perifericoService.CrearPeriferico(periferico);
 
             return Ok(new
             {
                 mensaje = "Periférico creado con éxito",
-                periferico = new
-                {
-                    periferico.ID_Periferico,
-                    periferico.Nombre,
-                    periferico.Tipo,
-                    periferico.Estado
-                }
+                periferico = creado
             });
         }
 
-        // Editar Periférico
         [HttpPut("editar/{id}")]
         public async Task<IActionResult> EditarPeriferico(int id, [FromBody] PerifericoUpdate request)
         {
-            var periferico = await _context.Perifericos.FindAsync(id);
-            if (periferico == null)
+            var actualizado = await _perifericoService.EditarPeriferico(id, new Periferico
+            {
+                Nombre = request.Nombre,
+                Tipo = request.Tipo,
+                Estado = request.Estado
+            });
+
+            if (actualizado == null)
                 return NotFound($"Periférico con ID {id} no encontrado");
-
-            periferico.Nombre = request.Nombre;
-            periferico.Tipo = request.Tipo;
-            periferico.Estado = request.Estado;
-
-            await _context.SaveChangesAsync();
 
             return Ok(new
             {
                 mensaje = "Periférico actualizado con éxito",
-                periferico = new
-                {
-                    periferico.ID_Periferico,
-                    periferico.Nombre,
-                    periferico.Tipo,
-                    periferico.Estado
-                }
+                periferico = actualizado
             });
         }
 
-        // Listar Periféricos
         [HttpGet("listar")]
-        public async Task<ActionResult<IEnumerable<Periferico>>> ListarPerifericos()
+        public async Task<IActionResult> ListarPerifericos()
         {
-            var perifericos = await _context.Perifericos
-                .Include(p => p.Equipo) // muestra el equipo asignado (si lo tiene)
-                .ToListAsync();
-
+            var perifericos = await _perifericoService.ListarPerifericos();
             return Ok(perifericos);
         }
 
-        // Eliminar Periférico
         [HttpDelete("eliminar/{id}")]
         public async Task<IActionResult> EliminarPeriferico(int id)
         {
-            var periferico = await _context.Perifericos.FindAsync(id);
-            if (periferico == null)
+            var eliminado = await _perifericoService.EliminarPeriferico(id);
+            if (!eliminado)
                 return NotFound($"Periférico con ID {id} no encontrado");
 
-            _context.Perifericos.Remove(periferico);
-            await _context.SaveChangesAsync();
-
-            return Ok(new
-            {
-                mensaje = "Periférico eliminado con éxito",
-                periferico = new
-                {
-                    periferico.ID_Periferico,
-                    periferico.Nombre,
-                    periferico.Tipo,
-                    periferico.Estado
-                }
-            });
+            return Ok(new { mensaje = "Periférico eliminado con éxito" });
         }
     }
 }
-

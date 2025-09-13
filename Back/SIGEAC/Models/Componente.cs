@@ -1,23 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using SIGEAC.Enums;
 
 namespace SIGEAC.Models
 {
-    public enum EstadoComponente
-    {
-        Activo,
-        Inactivo
-    }
-
-    public enum TipoComponente
-    {
-        Procesador,
-        MemoriaSSD,
-        MemoriaRAM,
-        FuenteDePoder,
-        PlacaMadre
-    }
-
     public class Componente
     {
         [Key]

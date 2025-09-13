@@ -1,4 +1,5 @@
-﻿using SIGEAC.Models;
+﻿using SIGEAC.Enums;
+using SIGEAC.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace SIGEAC.DTOs

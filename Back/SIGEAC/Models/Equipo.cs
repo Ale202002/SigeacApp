@@ -1,11 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using SIGEAC.Enums;
 
 namespace SIGEAC.Models
 {
-    public enum NivelCriticidad { Alta, Media, Baja }
-    public enum SistemaOperativo { Windows, Linux, MacOS }
-
     public class Equipo
     {
         [Key]

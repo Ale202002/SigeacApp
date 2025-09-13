@@ -1,22 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using SIGEAC.Enums;
 
 namespace SIGEAC.Models
 {
-    public enum EstadoPeriferico
-    {
-        Activo,
-        Inactivo
-    }
-
-    public enum TipoPeriferico
-    {
-        Monitor,
-        Auriculares,
-        Mouse,
-        Teclado
-    }
-
     public class Periferico
     {
         [Key]
