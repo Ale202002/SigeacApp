@@ -1,10 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthService } from '@core/services/auth.service';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-
-
+import { AuthService } from '@core/services/auth.service';
 
 @Component({
   selector: 'app-login-page',
@@ -12,68 +10,60 @@ import { Router } from '@angular/router';
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './login-page.component.html',
 })
+export class LoginPageComponent implements OnInit {
 
-  //este componente maneja la logica de la pagina de login
-  export class LoginPageComponent {
-  //se utiliza los metodos reactive forms de angular para manejar el formulario de datos del login
-  loginForm: FormGroup;
-  error = '';
+  loginForm!: FormGroup;
+
   showErrors = false;
+  showPassword = false;
 
-  //aca inyectamos el formbuilder para crear el formulario y el authservice para manejar
-  //la autenticacion, y con el router para navegar despues del login
+  loading = signal(false);
+  errorMsg = signal('');
+
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService,
+    private auth: AuthService,
     private router: Router
-  ) {
+  ) {}
+
+  ngOnInit(): void {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      contrasena: ['', Validators.required]
+      contrasena: ['', [Validators.required, Validators.minLength(4)]]
     });
   }
 
-    // Marca todos los campos del formulario como 'touched' para mostrar errores inmediatamente
-    markAllFieldsAsTouched() {
-      Object.values(this.loginForm.controls).forEach(control => {
-        control.markAsTouched();
-      });
+  markAllFieldsAsTouched(): void {
+    Object.values(this.loginForm.controls).forEach(c => c.markAsTouched());
+  }
+
+  login(): void {
+    if (this.loginForm.invalid) {
+      this.markAllFieldsAsTouched();
+      this.showErrors = true;
+      console.warn('[Login] Form inválido', this.loginForm.value);
+      return;
     }
 
-  // Esta lógica maneja el inicio de sesión
-  // Se valida el formulario y se envían los datos al backend
-  // Si la autenticación falla, se muestran los errores en los campos y el mensaje general
-  login() {
-    if (this.loginForm.invalid) return;
+    this.errorMsg.set('');
+    this.loading.set(true);
 
-    // Obtiene los valores del formulario
     const { email, contrasena } = this.loginForm.value;
-    // Llama al servicio de autenticación
-    this.authService.login({ email, contrasena }).subscribe({
-      next: (response: any) => {
-        // Si el login es exitoso, navega según el rol del usuario
-        const usuario = response.usuario;
-        const rol = usuario?.rol;
-        const routesByRole = {
-          Administrador: '/dashboard',
-          RRHH: '/dashboard/employee',
-          Empleado: '/dashboard/my-device',
-        };
-        const route = routesByRole[rol as keyof typeof routesByRole];
-        if (!route) {
-          this.error = 'No tienes permisos para acceder.';
-          return;
-        }
+    console.log('[Login] Enviando credenciales', { email });
+
+    this.auth.login({ email, contrasena }).subscribe({
+      next: user => {
+        console.log('[Login] OK usuario:', user);
+        const route = this.auth.getDashboardRouteByRole();
+        this.loading.set(false);
         this.router.navigate([route]);
       },
-      /*error: (err) => {
-        // Si el login falla, muestra los errores en los campos y el mensaje general
-        this.error = 'Credenciales incorrectas';
-        this.markAllFieldsAsTouched();
+      error: err => {
+        console.error('[Login] Error', err);
+        this.errorMsg.set(err?.error?.message || 'Credenciales inválidas');
+        this.loading.set(false);
         this.showErrors = true;
-      }*/
+      }
     });
   }
-
-  showPassword = false;
 }

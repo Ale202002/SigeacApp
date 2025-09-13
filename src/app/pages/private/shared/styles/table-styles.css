@@ -1,0 +1,182 @@
+/* ==========================================================================
+   ESTILOS COMPARTIDOS PARA TABLAS Y COMPONENTES DE TABLA
+   ========================================================================== */
+
+/* Centrar checkboxes en celdas de tabla */
+td .p-checkbox,
+th .p-checkbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+/* Color de borde personalizado para checkboxes */
+p-checkbox .p-checkbox-box,
+.p-checkbox .p-checkbox-box {
+  border: 1px solid #707374 !important;
+  background-color: #f9f9f9 !important;
+  width: 18px !important;
+  height: 18px !important;
+  border-radius: 4px !important;
+}
+
+p-checkbox .p-checkbox-box:hover,
+.p-checkbox .p-checkbox-box:hover {
+  border-color: #555555 !important;
+  background-color: #e9ecef !important;
+}
+
+p-checkbox .p-checkbox-box.p-highlight,
+.p-checkbox .p-checkbox-box.p-highlight {
+  background-color: #555555 !important;
+  border-color: #555555 !important;
+}
+
+/* ==========================================================================
+   ESTILOS PARA PAGINACIÓN PERSONALIZADA
+   ========================================================================== */
+
+/* Selectores específicos para tema Aura */
+.custom-paginator .p-button,
+.custom-paginator .p-paginator-page,
+.custom-paginator .p-paginator-element {
+  color: #555555;
+  border: 1px solid #ddd;
+  background: white;
+  min-width: 2.5rem;
+  height: 2.5rem;
+  margin: 0 2px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+}
+
+.custom-paginator .p-button:hover,
+.custom-paginator .p-paginator-page:hover,
+.custom-paginator .p-paginator-element:hover {
+  background: #f5f5f5;
+  color: #555555;
+  border-color: #555555;
+}
+
+.custom-paginator .p-button.p-highlight,
+.custom-paginator .p-paginator-page.p-highlight,
+.custom-paginator .p-paginator-element.p-highlight {
+  background: #555555;
+  color: white;
+  border-color: #555555;
+}
+
+/* Botones de navegación específicos */
+.custom-paginator .p-paginator-first,
+.custom-paginator .p-paginator-prev,
+.custom-paginator .p-paginator-next,
+.custom-paginator .p-paginator-last {
+  color: #555555;
+  border: 1px solid #ddd;
+  background: white;
+  min-width: 2.5rem;
+  height: 2.5rem;
+  margin: 0 2px;
+  border-radius: 4px;
+}
+
+.custom-paginator .p-paginator-first:hover,
+.custom-paginator .p-paginator-prev:hover,
+.custom-paginator .p-paginator-next:hover,
+.custom-paginator .p-paginator-last:hover {
+  background: #f5f5f5;
+  color: #555555;
+  border-color: #555555;
+}
+
+/* Iconos de navegación */
+.custom-paginator .p-paginator-first .p-button-icon,
+.custom-paginator .p-paginator-prev .p-button-icon,
+.custom-paginator .p-paginator-next .p-button-icon,
+.custom-paginator .p-paginator-last .p-button-icon {
+  color: #555555;
+}
+
+/* Dropdown de filas por página */
+.custom-paginator .p-dropdown {
+  color: #555555;
+  border: 1px solid #ddd;
+  background: white;
+  height: 2.5rem;
+  min-width: 2.5rem;
+  border-radius: 4px;
+  margin: 0 2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-paginator .p-dropdown .p-dropdown-label {
+  color: #555555;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  text-align: center;
+  width: 100%;
+}
+
+.custom-paginator .p-dropdown:hover {
+  background: #f5f5f5;
+  border-color: #555555;
+}
+
+.custom-paginator .p-dropdown .p-dropdown-trigger {
+  color: #555555;
+  width: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-paginator .p-dropdown .p-dropdown-trigger .p-dropdown-trigger-icon {
+  font-size: 0.75rem;
+}
+
+/* Texto informativo */
+.custom-paginator .p-paginator-current {
+  color: #555555;
+  font-size: 0.875rem;
+  margin: 0 1rem;
+}
+
+/* Layout del paginador */
+.custom-paginator .p-paginator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* Páginas específicas para Aura */
+.custom-paginator .p-paginator-pages .p-paginator-page {
+  color: #555555;
+  border: 1px solid #ddd;
+  background: white;
+  min-width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-paginator .p-paginator-pages .p-paginator-page:hover {
+  background: #f5f5f5;
+  border-color: #555555;
+}
+
+.custom-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+  background: #555555;
+  color: white;
+  border-color: #555555;
+}

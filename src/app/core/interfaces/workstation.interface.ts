@@ -1,27 +1,34 @@
-import { User } from '@core/interfaces/user.interface';
-import { Device } from './device.interface';
+import { EntityStatus } from '@core/enums/options-enums/EntityStatus.enum';
+import { Plant } from '@core/enums/options-enums/Plant.enum';
+import { resolvePlantFromCode } from '@core/constants/plant-prefix.map';
+import { buildSearchIndex } from '@core/utils/search.utils';
+import { WorkStationDto } from './Dtos/workstationDto.interface';
 
-
-//aca se definen las interfaces de puesto de trabajo que 
-// tienen los datos tambien de equipo y usuario, esto se saco de los datos del backend
 export interface WorkStation {
-    ID_Puesto: number;
-    ubicacion: string;
-    estado: string;
-    usuarioID: number;
-    equipoID: number;
-    empleado?: User
-    equipo?: Device;
+  id: number;
+  ubicacion: string;
+  status: EntityStatus;
+  plant: Plant | null;
+  usuarioId: number | null;
+  equipoId: number | null;
+  searchIndex: string;
 }
 
-export interface WorkStationCreate {
-    ubicacion: string;
-    estado: string;
-    usuarioID?: number;
+export function mapWorkStationDto(dto: WorkStationDto): WorkStation {
+  const plant = resolvePlantFromCode(dto.ubicacion);
+  const status = dto.estado === 'activo' ? EntityStatus.Activo : EntityStatus.Inactivo;
+  const searchIndex = buildSearchIndex([dto.ubicacion, status, plant, dto.usuarioID]);
+  return {
+    id: dto.iD_Puesto,
+    ubicacion: dto.ubicacion,
+    status,
+    plant,
+    usuarioId: dto.usuarioID,
+    equipoId: dto.equipoID,
+    searchIndex
+  };
 }
 
-export interface WorkStationUpdate {
-    ubicacion: string;
-    estado: string;
-    usuarioID?: number;
+export function mapWorkStationsDto(list: WorkStationDto[]): WorkStation[] {
+  return list.map(mapWorkStationDto);
 }

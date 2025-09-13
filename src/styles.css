@@ -2,27 +2,11 @@
 
 @import "tailwindcss";
 @import 'primeicons/primeicons.css';
+@import './app/pages/private/shared/styles/table-styles.css';
+@import './app/pages/private/shared/styles/toast-styles.css';
 
 body {
   font-family: 'Red Hat Display', sans-serif;
-
-}
-
-:host ::ng-deep .p-checkbox {
-  display: inline-flex !important;
-  vertical-align: middle !important;
-}
-:host ::ng-deep .p-checkbox-box {
-  border-radius: 0.375rem !important;
-  border-width: 2px !important;
-  border-color: #707374 !important;
-  width: 20px !important;
-  height: 20px !important;
-  background: #fff !important;
-}
-:host ::ng-deep .p-checkbox-icon {
-  font-size: 1.25rem !important;
-  color: #707374 !important;
 }
 
 :root {
@@ -32,4 +16,3 @@ body {
   --color-gray: #6C6C6C;
   --color-light: #F5F5F5;
 }
-

@@ -1,36 +1,29 @@
-import { RoleUser } from "@core/enums/user-enums/role-user.enum";
+import { RoleUser } from '@core/enums/user-enums/role-user.enum';
+import { UserDto } from './Dtos/userDto.interface';
 
-//Aca se definen las interfaces del usuario del backend,como tambien su create,update y login
+
+// Modelo de dominio (normalizado)
 export interface User {
-    iD_Usuario: number;
-    nombre: string;
-    apellido: string;
-    dni: string;
-    rol: RoleUser; // Solo: Administrador, RRHH, Empleado
-    email: string;
-    contrasena: string;
+  id: number;
+  nombre: string;
+  apellido: string;
+  dni: string;
+  email: string;
+  rol: RoleUser;
 }
 
-export interface UserCreate {
-    Nombre: string;
-    apellido: string;
-    dni: string;
-    Email: string;
-    /*Contrasena: string;*/
-    /*Rol: RoleUser; // Solo: Administrador, RRHH, Empleado*/
+// Mapper único
+export function mapUserDtoToUser(raw: UserDto): User {
+  return {
+    id: raw.iD_Usuario,
+    nombre: raw.nombre,
+    apellido: raw.apellido,
+    dni: raw.dni,
+    email: raw.email,
+    rol: raw.rol
+  };
 }
 
-export interface UserUpdate {
-    iD_Usuario: number;
-    Nombre: string;
-    apellido: string;
-    dni: string;
-    Email: string;
-    contrasena: string;
+export function mapUsersDtoToUsers(list: UserDto[]): User[] {
+  return list.map(mapUserDtoToUser);
 }
-
-export interface UserLogin {
-    email: string;
-    contrasena: string;
-}
-

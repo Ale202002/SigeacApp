@@ -1,115 +1,106 @@
 import { Component, OnInit } from '@angular/core';
-import { MessageService } from 'primeng/api';
-import { TableModule } from 'primeng/table';
-import { ToastModule } from 'primeng/toast';
 import { CommonModule } from '@angular/common';
-import { TagModule } from 'primeng/tag';
+import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { CheckboxModule } from 'primeng/checkbox';
-import { FormsModule } from '@angular/forms';
-import { TreeSelectModule } from 'primeng/treeselect';
+import { MessageService } from 'primeng/api';
 
-import { UserService } from '@core/services/user.service';
+import { NewEmployeeComponent } from '../new-employee/new-employee.component';
+import { GenericFiltersComponent } from '@pages/private/shared/components/generic-filters/generic-filters.component';
+import { GenericTable, TableColumn } from '@pages/private/shared/components/generic-table/generic-table';
+import { ConfirmationDialogComponent } from '@pages/private/shared/components/confirmation-dialog/confirmation-dialog.component';
 
-import { WorkStationService } from '@core/services/workstation.service';
-import { User } from '@core/interfaces/user.interface';
-import { WorkStation } from '@core/interfaces/workstation.interface';
-import { mapWorkstationsToEmployees, filterEmployees, plantaMap, getTreeSelectValue } from '@pages/private/main/consultas/employee-page/utils/employee-utils/employee-utils';
-export interface Employee {
-    id: string;
-    nombre: string;
-    estado: string;
-    correo: string;
-    puesto: string;
-    selected?: boolean;
-}
+import { Employee } from '@core/models/employee.model';
+import { EmployeeTableStore } from '../store/employee-store';
 
 @Component({
-    standalone: true,
-    selector: 'app-employee-table',
-   
-    imports: [TableModule, ToastModule, CommonModule, TagModule, ButtonModule, InputTextModule, CheckboxModule, FormsModule, TreeSelectModule],
-    templateUrl: 'employee-table.component.html',
-    providers: [MessageService]
+  standalone: true,
+  selector: 'app-employee-table',
+  templateUrl: './employee-table.component.html',
+  imports: [
+    CommonModule,
+    ToastModule,
+    ButtonModule,
+    NewEmployeeComponent,
+    GenericFiltersComponent,
+    GenericTable,
+    ConfirmationDialogComponent
+  ],
+  providers: [MessageService, EmployeeTableStore]
 })
 export class EmployeeTableComponent implements OnInit {
 
-    employees: (User & { selected?: boolean; puesto?: string; estado?: string })[] = [];
-    workstations: WorkStation[] = [];
-    allSelected: boolean = false;
-    estados: any[] = [
-        { key: 'all', label: 'Estados', data: 'null' },
-        { key: '0-0', label: 'Activo', data: 'activo' },
-        { key: '0-1', label: 'Inactivo', data: 'inactivo' }
-    ];
-    plantas: any[] = [
-        { key: 'all', label: 'Plantas', data: 'null' },
-        { key: '1-0', label: 'Primer piso', data: 'primer piso' },
-        { key: '1-1', label: 'Planta baja', data: 'planta baja' },
-        { key: '1-2', label: 'Subsuelo', data: 'subsuelo' }
-    ];
-    clonedEmployees: { [s: number]: User & { selected?: boolean; puesto?: string; estado?: string } } = {};
-    selectedPlanta: string | null = null;
-    selectedEstado: string | null = null;
-    searchTerm: string = '';
+  // Estado del diálogo de confirmación
+  showDeleteDialog = false;
+  employeeToDelete: Employee | null = null;
 
-    constructor(
-        private messageService: MessageService,
-        private userService: UserService,
-        private workstationService: WorkStationService
-    ) {}
+  // Configuración de columnas para la tabla
+  columns: TableColumn[] = [
+    { field: 'nombre', header: 'Nombre', type: 'custom', width: '250px' },
+    { field: 'status', header: 'Estado', type: 'status', width: '120px' },
+    { field: 'correo', header: 'Correo', type: 'text', width: '200px' },
+    { field: 'puestoUbicacion', header: 'Puesto', type: 'text', width: '200px' }
+  ];
 
-    ngOnInit() {
-        this.userService.listar().subscribe((data: User[]) => {
-            // Mapear empleados con sus puestos usando la utilidad
-            this.workstationService.listar().subscribe((puestos: WorkStation[]) => {
-                this.workstations = puestos;
-                this.employees = mapWorkstationsToEmployees(data, puestos);
-            });
-        });
+  constructor(public store: EmployeeTableStore, private messageService: MessageService) {}
+
+  ngOnInit(): void {
+    this.store.load();
+  }
+
+  // Eventos de filtros
+  onFiltersChange(filters: any) {
+    this.store.setSearch(filters.search || '');
+    this.store.setStatus(filters.status);
+    this.store.setPlant(filters.plant);
+  }
+
+  onClearFilters() {
+    this.store.clearFilters();
+  }
+
+  // Eventos de tabla
+  onToggleAll(select: boolean) {
+    this.store.toggleAll(select);
+  }
+
+  onRowToggle(employee: Employee) {
+    this.store.toggleRow(employee);
+  }
+
+  onEditEmployee(employee: Employee) {
+    // TODO: Implementar edición
+    console.log('Editar empleado:', employee);
+  }
+
+  onDeleteEmployee(employee: Employee) {
+    this.employeeToDelete = employee;
+    this.showDeleteDialog = true;
+  }
+
+  onConfirmDelete() {
+    if (this.employeeToDelete) {
+      this.store.deleteEmployee(this.employeeToDelete.id);
+      this.showDeleteDialog = false;
+      this.employeeToDelete = null;
     }
+  }
 
-    private plantaMap = plantaMap;
+  onCancelDelete() {
+    this.showDeleteDialog = false;
+    this.employeeToDelete = null;
+  }
 
-    toggleAllSelection() {
-        this.employees.forEach(emp => emp.selected = this.allSelected);
-    }
+  onPageChange(event: any) {
+    // Manejar cambio de página si es necesario
+    console.log('Página cambiada:', event);
+  }
 
-    onRowSelectChange(rowIndex: number) {
-        this.allSelected = this.employees.every(emp => emp.selected);
-    }
+  // Eventos de nuevo empleado
+  onEmployeeCreated(emp: Employee) {
+    this.store.addEmployee(emp);
+  }
 
-    getTreeSelectValue(selected: any): string | null {
-        return getTreeSelectValue(selected);
-    }
-
-    get filteredEmployees(): (User & { selected?: boolean; puesto?: string; estado?: string })[] {
-    return filterEmployees(this.employees as any, { planta: this.selectedPlanta, estado: this.selectedEstado, search: this.searchTerm, plantaMap: this.plantaMap });
-}
-
-    onRowEditInit(employee: User & { selected?: boolean; puesto?: string; estado?: string }) {
-        this.clonedEmployees[employee.iD_Usuario] = { ...employee };
-    }
-
-    onRowEditSave(employee: User & { selected?: boolean; puesto?: string; estado?: string }) {
-        delete this.clonedEmployees[employee.iD_Usuario];
-        this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Empleado actualizado' });
-    }
-
-    onRowEditCancel(employee: User & { selected?: boolean; puesto?: string; estado?: string }, index: number) {
-        this.employees[index] = this.clonedEmployees[employee.iD_Usuario];
-        delete this.clonedEmployees[employee.iD_Usuario];
-    }
-
-    getEstadoTagColor(estado: string) {
-        switch (estado) {
-            case 'activo':
-                return 'success';
-            case 'inactivo':
-                return 'danger';
-            default:
-                return 'info';
-        }
-    }
+  onReloadRequested() {
+    this.store.refresh();
+  }
 }

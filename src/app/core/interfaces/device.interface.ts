@@ -1,94 +1,97 @@
 //esta interfaz de Device(Equipo) contiene todas las propiedades y datos que el backend maneja para un equipo
-import { criticalityLevel } from "@core/enums/device-enums/criticality-level.enum";
-import { OperatingSystem } from "@core/enums/device-enums/operating-system.enum";
-import { User } from "./user.interface";
-import { WorkStation } from "./workstation.interface";
+
+import { EntityStatus } from '@core/enums/options-enums/EntityStatus.enum';
+import { Plant } from '@core/enums/options-enums/Plant.enum';
+import { resolvePlantFromCode } from '@core/constants/plant-prefix.map';
+import { buildSearchIndex } from '@core/utils/search.utils';
+import { OperatingSystem } from '@core/enums/device-enums/operating-system.enum';
+import { criticalityLevel } from '@core/enums/device-enums/criticality-level.enum';
+import { DeviceDto } from './Dtos/deviceDto.interface';
+import { WorkStationDto } from './Dtos/workstationDto.interface';
 
 export interface Device {
-  ID_Equipo: number;
-  IdentificadorActivo: string;
-  PuestoID: number;
-  Puesto?: WorkStation;
-  DisponibilidadFisica: boolean;
-  Area: string;
-  EmpleadoAsignadoID: number;
-  EmpleadoAsignado?: User;
-  IP: string;
-  NumeroSerie: string;
-  MAC: string;
-  Tipo: boolean; // true = desktop, false = notebook
-  PropiedadActivo: boolean;
-  SistemaOperativo: OperatingSystem;
-  VersionSO: string;
-  Soporte: boolean;
-  Confidencialidad: criticalityLevel;
-  Disponibilidad: criticalityLevel;
-  Integridad: criticalityLevel;
-  Criticidad: criticalityLevel;
-  FechaClasificacion: string;
-  VPNLabs: boolean;
-  EscritorioRemoto: boolean;
-  Cifrado: boolean;
-  ContrasenaCifrado?: string;
-  Antivirus: boolean;
-  Adicionales?: string;
-  UsuariosAutorizados?: User[];
+  id: number;
+  identificador: string;
+  puestoId: number | null;
+  status: EntityStatus;          // derivado del puesto.estado si existe
+  plant: Plant | null;
+  disponibilidadFisica: boolean;
+  area: string;
+  empleadoAsignadoId: number | null;
+  ip: string;
+  numeroSerie: string;
+  mac: string;
+  esDesktop: boolean;
+  propiedadActivo: boolean;
+  sistemaOperativo: string | OperatingSystem;
+  versionSO: string;
+  soporte: boolean;
+  confidencialidad: string | criticalityLevel;
+  disponibilidad: string | criticalityLevel;
+  integridad: string | criticalityLevel;
+  criticidad: string | criticalityLevel;
+  fechaClasificacion: string;
+  vpnLabs: boolean;
+  escritorioRemoto: boolean;
+  cifrado: boolean;
+  antivirus: boolean;
+  adicionales?: string;
+  componentesCount: number;
+  searchIndex: string;
+  selected?: boolean;
 }
 
-export interface DeviceCreate {
-  IdentificadorActivo: string;
-  PuestoID: number;
-  DisponibilidadFisica: boolean;
-  Area: string;
-  EmpleadoAsignadoID: number;
-  IP: string;
-  NumeroSerie: string;
-  MAC: string;
-  Tipo: boolean;
-  PropiedadActivo: boolean;
-  SistemaOperativo: OperatingSystem;
-  VersionSO: string;
-  Soporte: boolean;
-  Confidencialidad: criticalityLevel;
-  Disponibilidad: criticalityLevel;
-  Integridad: criticalityLevel;
-  Criticidad: criticalityLevel;
-  FechaClasificacion: string;
-  VPNLabs: boolean;
-  EscritorioRemoto: boolean;
-  Cifrado: boolean;
-  ContrasenaCifrado?: string;
-  Antivirus: boolean;
-  Adicionales?: string;
-  UsuariosAutorizadosIDs?: number[];
+export function mapDeviceDto(dto: DeviceDto): Device {
+  const puesto: WorkStationDto | null = dto.puesto ?? null;
+  const status: EntityStatus = puesto
+    ? (puesto.estado === 'activo' ? EntityStatus.Activo : EntityStatus.Inactivo)
+    : EntityStatus.Inactivo;
+
+  const plant: Plant | null = puesto ? resolvePlantFromCode(puesto.ubicacion) : null;
+
+  const searchIndex = buildSearchIndex([
+    dto.identificadorActivo,
+    dto.numeroSerie,
+    dto.mac,
+    dto.sistemaOperativo,
+    dto.area,
+    status,
+    plant
+  ]);
+
+  return {
+    id: dto.iD_Equipo,
+    identificador: dto.identificadorActivo,
+    puestoId: dto.puestoID,
+    status,
+    plant,
+    disponibilidadFisica: dto.disponibilidadFisica,
+    area: dto.area,
+    empleadoAsignadoId: dto.empleadoAsignadoID,
+    ip: dto.ip,
+    numeroSerie: dto.numeroSerie,
+    mac: dto.mac,
+    esDesktop: dto.tipo,
+    propiedadActivo: dto.propiedadActivo,
+    sistemaOperativo: dto.sistemaOperativo,
+    versionSO: dto.versionSO,
+    soporte: dto.soporte,
+    confidencialidad: dto.confidencialidad,
+    disponibilidad: dto.disponibilidad,
+    integridad: dto.integridad,
+    criticidad: dto.criticidad,
+    fechaClasificacion: dto.fechaClasificacion,
+    vpnLabs: dto.vpnLabs,
+    escritorioRemoto: dto.escritorioRemoto,
+    cifrado: dto.cifrado,
+    antivirus: dto.antivirus,
+    adicionales: dto.adicionales || undefined,
+    componentesCount: dto.componentes?.length ?? 0,
+    searchIndex,
+    selected: false
+  };
 }
 
-// Para actualizar (con ID)
-export interface DeviceUpdate {
-  ID_Equipo: number;
-  IdentificadorActivo: string;
-  PuestoID: number;
-  DisponibilidadFisica: boolean;
-  Area: string;
-  EmpleadoAsignadoID: number;
-  IP: string;
-  NumeroSerie: string;
-  MAC: string;
-  Tipo: boolean;
-  PropiedadActivo: boolean;
-  SistemaOperativo: OperatingSystem;
-  VersionSO: string;
-  Soporte: boolean;
-  Confidencialidad: criticalityLevel;
-  Disponibilidad: criticalityLevel;
-  Integridad: criticalityLevel;
-  Criticidad: criticalityLevel;
-  FechaClasificacion: string;
-  VPNLabs: boolean;
-  EscritorioRemoto: boolean;
-  Cifrado: boolean;
-  ContrasenaCifrado?: string;
-  Antivirus: boolean;
-  Adicionales?: string;
-  UsuariosAutorizadosIDs?: number[];
+export function mapDevicesDto(list: DeviceDto[]): Device[] {
+  return list.map(mapDeviceDto);
 }

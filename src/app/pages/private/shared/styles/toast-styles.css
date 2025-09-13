@@ -1,0 +1,98 @@
+/* ==========================================================================
+   ESTILOS PERSONALIZADOS PARA TOASTS (NOTIFICACIONES)
+   ========================================================================== */
+
+/* Toast de éxito con fondo verde */
+.p-toast .p-toast-message.p-toast-message-success {
+  background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%) !important;
+  border: 1px solid #28a745 !important;
+  border-left: 4px solid #28a745 !important;
+  border-radius: 6px !important;
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.15) !important;
+  color: #155724 !important;
+}
+
+.p-toast .p-toast-message.p-toast-message-success .p-toast-message-icon {
+  color: #28a745 !important;
+}
+
+.p-toast .p-toast-message.p-toast-message-success .p-toast-summary {
+  color: #155724 !important;
+  font-weight: 600 !important;
+}
+
+.p-toast .p-toast-message.p-toast-message-success .p-toast-detail {
+  color: #155724 !important;
+  opacity: 0.9 !important;
+}
+
+/* Toast de warning con fondo amarillo */
+.p-toast .p-toast-message.p-toast-message-warn {
+  background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%) !important;
+  border: 1px solid #ffc107 !important;
+  border-left: 4px solid #ffc107 !important;
+  border-radius: 6px !important;
+  box-shadow: 0 4px 12px rgba(255, 193, 7, 0.15) !important;
+  color: #856404 !important;
+}
+
+.p-toast .p-toast-message.p-toast-message-warn .p-toast-message-icon {
+  color: #ffc107 !important;
+}
+
+.p-toast .p-toast-message.p-toast-message-warn .p-toast-summary {
+  color: #856404 !important;
+  font-weight: 600 !important;
+}
+
+.p-toast .p-toast-message.p-toast-message-warn .p-toast-detail {
+  color: #856404 !important;
+  opacity: 0.9 !important;
+}
+
+/* Toast de error con fondo rojo */
+.p-toast .p-toast-message.p-toast-message-error {
+  background: linear-gradient(135deg, #f8d7da 0%, #f1aeb5 100%) !important;
+  border: 1px solid #dc3545 !important;
+  border-left: 4px solid #dc3545 !important;
+  border-radius: 6px !important;
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.15) !important;
+  color: #721c24 !important;
+}
+
+.p-toast .p-toast-message.p-toast-message-error .p-toast-message-icon {
+  color: #dc3545 !important;
+}
+
+.p-toast .p-toast-message.p-toast-message-error .p-toast-summary {
+  color: #721c24 !important;
+  font-weight: 600 !important;
+}
+
+.p-toast .p-toast-message.p-toast-message-error .p-toast-detail {
+  color: #721c24 !important;
+  opacity: 0.9 !important;
+}
+
+/* ==========================================================================
+   ESTILOS GENERALES PARA MEJORAR APARIENCIA DE TOASTS
+   ========================================================================== */
+
+.p-toast .p-toast-message {
+  margin: 0.5rem !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+.p-toast .p-toast-message .p-toast-message-content {
+  padding: 1rem 1.25rem !important;
+}
+
+.p-toast .p-toast-message .p-toast-summary {
+  font-size: 1rem !important;
+  margin-bottom: 0.25rem !important;
+}
+
+.p-toast .p-toast-message .p-toast-detail {
+  font-size: 0.875rem !important;
+  line-height: 1.4 !important;
+}

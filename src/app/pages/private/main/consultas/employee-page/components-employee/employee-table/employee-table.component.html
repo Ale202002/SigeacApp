@@ -1,73 +1,56 @@
+<div class="mt-16 md:mt-20">
+  <p-toast></p-toast>
 
+  <div class="flex items-center justify-between mb-2 px-1">
+    <div>
+      <h2 class="text-2xl font-semibold text-gray-700">Empleados</h2>
+      <p class="text-xs text-gray-500 mt-1">{{ store.items().length }} registros</p>
+    </div>
+    <app-new-employee
+      (employeeCreated)="onEmployeeCreated($event)"
+      (reloadRequested)="onReloadRequested()">
+    </app-new-employee>
+  </div>
 
-<!-- Filtros y buscador arriba -->
-<div class="flex gap-8 mb-12 justify-center mt-8">
-    <div class="flex items-center" style="width:246px; height:48px;">
-        <span class="w-full relative">
-            <p-treeSelect [options]="plantas" [(ngModel)]="selectedPlanta" appendTo="body" placeholder="Plantas" class="w-full border rounded-lg px-4 py-3 focus:outline-none align-middle" style="width:246px; height:48px; line-height:32px; border-radius:0.5rem; border-color:#6C6C6C; border-width:2px; color:#555555AD;" ></p-treeSelect>
-        </span>
-    </div>
-    <div class="flex items-center" style="width:246px; height:48px;">
-        <span class="w-full relative">
-            <p-treeSelect [options]="estados" [(ngModel)]="selectedEstado" appendTo="body" placeholder="Estados" class="w-full border rounded-lg px-4 py-3 focus:outline-none align-middle" style="width:246px; height:48px; line-height:32px; border-radius:0.5rem; border-color:#6C6C6C; border-width:2px; color:#555555AD;" ></p-treeSelect>
-        </span>
-    </div>
-    <div class="flex-1 max-w-xs flex items-center">
-        <span class="w-full relative">
-            <input type="text" [(ngModel)]="searchTerm" placeholder="Buscar..." class="w-full border rounded-lg px-4 py-3 focus:outline-none" style="height:48px; border-radius:0.5rem; border-color:#6C6C6C; border-width:2px; color:#555555AD;" />
-            <i class="pi pi-search absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl"></i>
-        </span>
-    </div>
+  <!-- Filtros usando GenericFiltersComponent -->
+  <app-generic-filters
+    [estados]="store.estados"
+    [plantas]="store.plantas"
+    (filtersChange)="onFiltersChange($event)"
+    (clear)="onClearFilters()"
+    (reload)="store.refresh()">
+  </app-generic-filters>
+
+  <!-- Tabla usando GenericTable -->
+  <div class="flex justify-center">
+    <app-generic-table
+      [items]="store.items()"
+      [columns]="columns"
+      [loading]="store.loading()"
+      [allSelected]="store.allSelected()"
+      [paginate]="true"
+      [rows]="5"
+      [totalRecords]="store.items().length"
+      [rowsPerPageOptions]="[5, 10, 25, 50]"
+      [showCheckboxes]="true"
+      [showActions]="true"
+      [emptyMessage]="'No hay empleados registrados.'"
+      (toggleAll)="onToggleAll($event)"
+      (rowToggle)="onRowToggle($event)"
+      (editItem)="onEditEmployee($event)"
+      (deleteItem)="onDeleteEmployee($event)"
+      (pageChange)="onPageChange($event)">
+    </app-generic-table>
+  </div>
+
+  <!-- Diálogo de confirmación para dar de baja empleado -->
+  <app-confirmation-dialog
+    [visible]="showDeleteDialog"
+    title="Dar de Baja Empleado/a"
+    [message]="'¿Estás seguro/a que deseas dar de baja al empleado/a ' + (employeeToDelete?.nombre || '') + '?'"
+    confirmText="CONFIRMAR BAJA"
+    cancelText="Cancelar"
+    (confirm)="onConfirmDelete()"
+    (cancel)="onCancelDelete()">
+  </app-confirmation-dialog>
 </div>
-
-<!-- Tabla editable PrimeNG centrada horizontalmente y con border-radius solo en el header -->
-<div class="flex justify-center">
-    <div class="w-full max-w-5xl">
-                <p-table [value]="filteredEmployees" dataKey="id" class="w-full" [tableStyle]="{'min-width': '50rem'}">
-                    <ng-template pTemplate="header">
-                        <tr class="bg-[#e8773c] h-[56px] rounded-t-xl">
-                            <th class="w-[60px] text-center align-middle rounded-tl-xl">
-                                <div class="flex items-center justify-center h-[56px]">
-                                    <p-checkbox [(ngModel)]="allSelected" binary="true" (onChange)="toggleAllSelection()" styleClass="h-5 w-5 border-2 border-[#707374] rounded-md bg-white" ></p-checkbox>
-                                </div>
-                            </th>
-                            <th class="w-[220px] text-left font-semibold text-lg text-white">Nombre</th>
-                            <th class="w-[180px] text-left font-semibold text-lg text-white">Estado</th>
-                            <th class="w-[320px] text-left font-semibold text-lg text-white">Correo</th>
-                            <th class="w-[140px] text-left font-semibold text-lg text-white">Puesto</th>
-                            <th class="w-[40px] rounded-tr-xl"></th>
-                        </tr>
-                    </ng-template>
-                    <ng-template pTemplate="body" let-employee let-rowIndex="rowIndex">
-                        <tr>
-                            <td class="text-center w-[60px]">
-                                <div class="flex items-center justify-center h-[40px]">
-                                    <p-checkbox [(ngModel)]="employee.selected" binary="true" (onChange)="onRowSelectChange(rowIndex)" styleClass="h-5 w-5 border-2 border-[#707374] rounded-md bg-white" ></p-checkbox>
-                                </div>
-                            </td>
-                            <td class="w-[220px]">
-                                <div class="flex items-center gap-2">
-                                    <i class="pi pi-user text-xl text-gray-600"></i>
-                                    <span class="text-gray-900 text-base">{{employee.nombre}} {{employee.apellido}}</span>
-                                </div>
-                            </td>
-                            <td class="w-[180px]">
-                                <span [ngClass]="employee.estado === 'activo' ? 'flex items-center gap-2 border border-green-400 text-green-600 bg-white rounded-full px-4 py-1 mr-4' : 'flex items-center gap-2 border border-red-400 text-red-600 bg-white rounded-full px-4 py-1 mr-4'">
-                                    <i [ngClass]="employee.estado === 'activo' ? 'pi pi-check text-green-500 text-xl' : 'pi pi-ban text-red-500 text-xl'"></i>
-                                    <span class="font-medium">{{employee.estado}}</span>
-                                </span>
-                            </td>
-                            <td class="w-[320px]">{{employee.email}}</td>
-                            <td class="w-[140px]">{{employee.puesto}}</td>
-                            <td class="w-[40px]">
-                                <div class="flex gap-2 justify-end items-center">
-                                    <button pButton type="button" icon="pi pi-pencil" class="p-button-text p-1 hover:bg-gray-100 rounded" title="Editar"></button>
-                                    <button pButton type="button" icon="pi pi-trash" class="p-button-text p-1 hover:bg-gray-100 rounded text-red-500" title="Eliminar"></button>
-                                </div>
-                            </td>
-                        </tr>
-                    </ng-template>
-                </p-table>
-        </div>
-    </div>
-

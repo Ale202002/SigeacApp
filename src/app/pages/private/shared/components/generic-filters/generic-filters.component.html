@@ -1,0 +1,45 @@
+<div class="flex gap-8 mb-12 justify-center mt-8">
+
+  <!-- Selector de Plantas -->
+  <div class="flex items-center" style="width:246px; height:48px;">
+    <span class="w-full relative">
+      <select
+        [(ngModel)]="selectedPlanta"
+        (ngModelChange)="onPlantaChange($event)"
+        class="w-full border rounded-lg px-4 py-3 focus:outline-none"
+        style="width:246px; height:48px; line-height:32px; border-radius:0.5rem; border-color:#6C6C6C; border-width:2px; color:#555555AD;">
+        <option [ngValue]="null">Plantas</option>
+        <option *ngFor="let p of plantas" [ngValue]="p">{{ p.label }}</option>
+      </select>
+    </span>
+  </div>
+
+  <!-- Selector de Estados -->
+  <div class="flex items-center" style="width:246px; height:48px;">
+    <span class="w-full relative">
+      <select
+        [(ngModel)]="selectedEstado"
+        (ngModelChange)="onEstadoChange($event)"
+        class="w-full border rounded-lg px-4 py-3 focus:outline-none"
+        style="width:246px; height:48px; line-height:32px; border-radius:0.5rem; border-color:#6C6C6C; border-width:2px; color:#555555AD;">
+        <option [ngValue]="null">Estados</option>
+        <option *ngFor="let e of estados" [ngValue]="e">{{ e.label }}</option>
+      </select>
+    </span>
+  </div>
+
+  <!-- Campo de Búsqueda -->
+  <div class="flex-1 max-w-xs flex items-center">
+    <span class="w-full relative">
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="onSearchChange()"
+        placeholder="Buscar..."
+        class="w-full border rounded-lg px-4 py-3 focus:outline-none"
+        style="height:48px; border-radius:0.5rem; border-color:#6C6C6C; border-width:2px; color:#555555AD;" />
+      <i class="pi pi-search absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl"></i>
+    </span>
+  </div>
+
+</div>

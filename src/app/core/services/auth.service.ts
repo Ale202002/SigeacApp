@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { User, UserLogin } from '@core/interfaces/user.interface';
+import { BehaviorSubject, map, Observable, tap } from 'rxjs';
+import { mapUserDtoToUser, User} from '@core/interfaces/user.interface';
+import { UserDto, UserLoginDto } from '@core/interfaces/Dtos/userDto.interface';
 
 
 // Definimos el tipo exacto del usuario que devuelve el backend
-
+type RawLoginResponse = UserDto | { usuario: UserDto };
 @Injectable({
   providedIn: 'root'
 })
@@ -30,15 +31,15 @@ export class AuthService {
 
   //Manda las credenciales al backend y devuelve el usuario, 
   // solamente se guarda en el LocalStorage los datos del usuario (sin contraseña)
-  login(credentials: UserLogin): Observable<User> {
-    return this.http.post<any>(`${this.API_URL}/login`, credentials).pipe(
-      tap((response: any) => {
-        // Si la respuesta tiene 'usuario', guardar solo el usuario
-        const user = response.usuario ? response.usuario : response;
-        if (user) {
-          localStorage.setItem('currentUser', JSON.stringify(user));
-          this.currentUserSubject.next(user);
-        }
+   login(credentials: UserLoginDto): Observable<User> {
+    return this.http.post<RawLoginResponse>(`${this.API_URL}/login`, credentials).pipe(
+      // Normaliza la forma de la respuesta
+      map(resp => ('usuario' in resp ? resp.usuario : resp)),
+      // Mapea DTO → dominio
+      map((dto: UserDto) => mapUserDtoToUser(dto)),
+      tap(user => {
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        this.currentUserSubject.next(user);
       })
     );
   }

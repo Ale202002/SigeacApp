@@ -1,38 +1,37 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/internal/Observable';
-import { User, UserCreate, UserUpdate } from '@core/interfaces/user.interface';
+import { Observable, map } from 'rxjs';
+import { User, mapUserDtoToUser } from '@core/interfaces/user.interface';
+import { UserCreateDto, UserDto, UserUpdateDto } from '@core/interfaces/Dtos/userDto.interface';
 
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class UserService {
-    //URL de la API de /Usuarios
-   private readonly API_URL = 'https://localhost:44334/api/Usuarios';
+  private readonly API_URL = 'https://localhost:44334/api/Usuarios';
 
-  //Se inyecta el httpclient para las peticiones al backend
   constructor(private http: HttpClient) {}
 
-  //se hace un CRUD para usuarios de la linea 17 hasta 35 (una vez creado el usuario se le pone por default el rol Empleado)
-  crear(user: UserCreate): Observable<any> {
-      return this.http.post(`${this.API_URL}/crear`, user);
-    }
-  
-    modificar(id: number, user: UserUpdate): Observable<any> {
-      return this.http.put(`${this.API_URL}/editar/${id}`, user);
-    }
-  
-    listar(): Observable<User[]> {
-      return this.http.get<User[]>(`${this.API_URL}/listar`);
-    }
-  
-    buscar(id: number): Observable<User> {
-      return this.http.get<User>(`${this.API_URL}/buscar/${id}`);
-    }
-  
-    eliminar(id: number): Observable<any> {
-      return this.http.delete(`${this.API_URL}/eliminar/${id}`);
-    }
-  
+  crear(payload: UserCreateDto): Observable<User> {
+    return this.http.post<UserDto>(`${this.API_URL}/crear`, payload)
+      .pipe(map(mapUserDtoToUser));
+  }
+
+  modificar(id: number, payload: UserUpdateDto): Observable<User> {
+    return this.http.put<UserDto>(`${this.API_URL}/editar/${id}`, payload)
+      .pipe(map(mapUserDtoToUser));
+  }
+
+  listar(): Observable<User[]> {
+    return this.http.get<UserDto[]>(`${this.API_URL}/listar`)
+      .pipe(map(list => list.map(mapUserDtoToUser)));
+  }
+
+  buscar(id: number): Observable<User> {
+    return this.http.get<UserDto>(`${this.API_URL}/buscar/${id}`)
+      .pipe(map(mapUserDtoToUser));
+  }
+
+  eliminar(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.API_URL}/eliminar/${id}`);
+  }
 }
