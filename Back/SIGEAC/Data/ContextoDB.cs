@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SIGEAC.Enums;
 using SIGEAC.Models;
 
 namespace SIGEAC.Data
