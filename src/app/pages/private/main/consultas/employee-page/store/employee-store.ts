@@ -152,4 +152,9 @@ export class EmployeeTableStore extends BaseTableStore<Employee> {
   employees() {
     return this.items();
   }
+
+  // Método para actualizar un empleado en el store
+  updateEmployee(employee: Employee) {
+    this.updateItem(employee);
+  }
 }

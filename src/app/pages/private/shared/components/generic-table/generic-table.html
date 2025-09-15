@@ -3,7 +3,7 @@
   <p-table 
     [value]="paginatedItems" 
     [loading]="loading"
-    responsiveLayout="scroll"
+    responsiveLayout="stack"
     class="w-full"
     styleClass="rounded-lg overflow-hidden border border-gray-200">
     
@@ -73,20 +73,17 @@
         
         <td *ngIf="showActions" class="text-center py-3 px-4">
           <div class="flex justify-center gap-2">
-            <button 
-              (click)="onEdit(item)"
-              class="p-1 rounded hover:bg-gray-100"
-              title="Editar"
-              style="color: #555555;">
-              <i class="pi pi-pencil"></i>
-            </button>
-            <button 
-              (click)="onDelete(item)"
-              class="p-1 rounded hover:bg-gray-100"
-              title="Eliminar"
-              style="color: #555555;">
-              <i class="pi pi-trash"></i>
-            </button>
+            <app-edit-button 
+              [item]="item"
+              [tooltip]="editTooltip"
+              (edit)="onEdit($event)">
+            </app-edit-button>
+            
+            <app-delete-button 
+              [item]="item"
+              [tooltip]="deleteTooltip"
+              (delete)="onDelete($event)">
+            </app-delete-button>
           </div>
         </td>
       </tr>

@@ -13,6 +13,7 @@ export interface Device {
   id: number;
   identificador: string;
   puestoId: number | null;
+  puestoNombre?: string | null;  // Agregado para mostrar el nombre del puesto
   status: EntityStatus;          // derivado del puesto.estado si existe
   plant: Plant | null;
   disponibilidadFisica: boolean;
@@ -63,6 +64,7 @@ export function mapDeviceDto(dto: DeviceDto): Device {
     id: dto.iD_Equipo,
     identificador: dto.identificadorActivo,
     puestoId: dto.puestoID,
+    puestoNombre: puesto?.ubicacion || null,  // Agregar el nombre del puesto
     status,
     plant,
     disponibilidadFisica: dto.disponibilidadFisica,

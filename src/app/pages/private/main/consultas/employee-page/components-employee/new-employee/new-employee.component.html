@@ -9,7 +9,9 @@
 
 <div *ngIf="show" class="fixed inset-0 z-50 flex items-start justify-center pt-24 bg-black/30 backdrop-blur-sm">
   <div class="bg-white w-full max-w-xl rounded shadow-lg border relative px-10 py-8">
-    <h3 class="text-xl font-semibold mb-6">Nuevo Empleado</h3>
+    <h3 class="text-xl font-semibold mb-6">
+      Nuevo Empleado
+    </h3>
 
     <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-5">
       <div>

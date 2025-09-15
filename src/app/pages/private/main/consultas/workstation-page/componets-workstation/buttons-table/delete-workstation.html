@@ -1,0 +1,17 @@
+<app-delete-button 
+  [item]="workstation"
+  [tooltip]="''"
+  [disabled]="false"
+  (delete)="openDeleteDialog()">
+</app-delete-button>
+
+<!-- Diálogo de confirmación para eliminar puesto -->
+<app-confirmation-dialog
+  [visible]="showDeleteDialog"
+  title="Dar de Baja Puesto"
+  [message]="'¿Estás seguro/a que deseas dar de baja el puesto?'"
+  confirmText="CONFIRMAR BAJA"
+  cancelText="Cancelar"
+  (confirm)="onConfirmDelete()"
+  (cancel)="onCancelDelete()">
+</app-confirmation-dialog>

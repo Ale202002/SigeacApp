@@ -124,4 +124,20 @@ export abstract class BaseTableStore<T extends BaseTableItem> {
   protected updateBaseItems(items: T[]) {
     this.baseItemsSig.set(items);
   }
+
+  // Método para actualizar un item específico
+  updateItem(updatedItem: T) {
+    this.baseItemsSig.update(items => {
+      const index = items.findIndex(item => item.id === updatedItem.id);
+      if (index !== -1) {
+        items[index] = { ...updatedItem };
+      }
+      return [...items];
+    });
+  }
+
+  // Método para agregar un item
+  addItem(newItem: T) {
+    this.baseItemsSig.update(items => [...items, newItem]);
+  }
 }

@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, map, Observable, tap } from 'rxjs';
 import { mapUserDtoToUser, User} from '@core/interfaces/user.interface';
 import { UserDto, UserLoginDto } from '@core/interfaces/Dtos/userDto.interface';
+import { environment } from '@core/config/environment';
 
 
 // Definimos el tipo exacto del usuario que devuelve el backend
@@ -20,7 +21,7 @@ export class AuthService {
 
   //Se pide la URL de la api de /Usuarios del backend -- 
   // Metodos BehaviorSubject y CurrentUserSubject para recibir estado del usuario logueado y actualizarlo
-  private readonly API_URL = 'https://localhost:44334/api/Usuarios';
+  private readonly API_URL = `${environment.apiUrl}/Usuarios`;
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
@@ -86,7 +87,7 @@ export class AuthService {
     const user = this.getCurrentUser();
     switch (user?.rol) {
       case 'Administrador':
-        return '/dashboard/employee';
+        return '/dashboard';
       case 'RRHH':
         return '/dashboard/employee';
       case 'Empleado':

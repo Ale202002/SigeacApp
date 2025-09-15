@@ -35,6 +35,8 @@
       [showCheckboxes]="true"
       [showActions]="true"
       [emptyMessage]="'No hay empleados registrados.'"
+      [editTooltip]="'Editar empleado'"
+      [deleteTooltip]="'Eliminar empleado'"
       (toggleAll)="onToggleAll($event)"
       (rowToggle)="onRowToggle($event)"
       (editItem)="onEditEmployee($event)"
@@ -43,14 +45,15 @@
     </app-generic-table>
   </div>
 
-  <!-- Diálogo de confirmación para dar de baja empleado -->
-  <app-confirmation-dialog
-    [visible]="showDeleteDialog"
-    title="Dar de Baja Empleado/a"
-    [message]="'¿Estás seguro/a que deseas dar de baja al empleado/a ' + (employeeToDelete?.nombre || '') + '?'"
-    confirmText="CONFIRMAR BAJA"
-    cancelText="Cancelar"
-    (confirm)="onConfirmDelete()"
-    (cancel)="onCancelDelete()">
-  </app-confirmation-dialog>
+  <!-- Container para componentes dinámicos -->
+  <div #editContainer style="display: none;">
+    <app-edit-employee-button 
+      [employee]="dummyEmployee" 
+      style="display: none;">
+    </app-edit-employee-button>
+    <app-delete-employee-button 
+      [employee]="dummyEmployee" 
+      style="display: none;">
+    </app-delete-employee-button>
+  </div>
 </div>

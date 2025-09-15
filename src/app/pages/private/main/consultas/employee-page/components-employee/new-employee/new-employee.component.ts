@@ -25,7 +25,7 @@ export class NewEmployeeComponent {
   show = false;
   saving = false;
 
-  form!: FormGroup; // inicializada en el constructor
+  form!: FormGroup;
 
   constructor(
     private fb: FormBuilder,
@@ -55,7 +55,10 @@ export class NewEmployeeComponent {
       return;
     }
     this.saving = true;
+    this.createEmployee();
+  }
 
+  private createEmployee() {
     const { nombreApellido, dni, email } = this.form.value;
 
     const parts = (nombreApellido || '').trim().split(/\s+/);
@@ -70,49 +73,83 @@ export class NewEmployeeComponent {
     };
 
     this.userService.crear(payload).subscribe({
-      next: (user) => {
-        console.log('Usuario creado desde backend:', user); // Para debug
-        
-        // Construir nombre completo de forma más segura
-        const nombre = user.nombre || '';
-        const apellido = user.apellido || '';
-        const fullName = `${nombre} ${apellido}`.trim() || 'Sin nombre';
-        
-        const status = EntityStatus.Inactivo; // cambia a Activo si querés
-        const searchIndex = buildSearchIndex([
-          nombre,
-          apellido,
-          user.email,
-          null,
-          status,
-          null
-        ]);
-
-        const empleado: Employee = {
-          id: user.id,
-          nombre: fullName,
-          correo: user.email || '',
+      next: (newUser) => {
+        const newEmployee: Employee = {
+          id: newUser.id,
+          nombre: `${newUser.nombre} ${newUser.apellido}`.trim(),
+          dni: newUser.dni,
+          correo: newUser.email,
           puestoId: null,
-          puestoUbicacion: null,
-          status,
+          puestoUbicacion: 'Sin asignar',
+          status: EntityStatus.Activo,
           plant: null,
-          searchIndex,
-          selected: false
+          selected: false,
+          searchIndex: buildSearchIndex([
+            newUser.nombre, 
+            newUser.apellido, 
+            newUser.email, 
+            'Sin asignar', 
+            EntityStatus.Activo, 
+            'Sin asignar'
+          ])
         };
-
-        console.log('Empleado mapeado para agregar:', empleado); // Para debug
-        this.employeeCreated.emit(empleado);
-        this.msg.add({ severity: 'success', summary: 'Registrado', detail: 'Empleado creado' });
+        
+        this.employeeCreated.emit(newEmployee);
+        this.msg.add({ 
+          severity: 'success', 
+          summary: 'Creado', 
+          detail: 'Empleado creado correctamente' 
+        });
         this.saving = false;
         this.show = false;
       },
       error: (err) => {
-        console.log('Crear usuario error =>', err);  // <--- añade esto
-    this.msg.add({ severity: 'error', summary: 'Error', detail: err?.error?.message || 'No se pudo crear' });
-    this.saving = false;
+        this.handleCreateError(err);
       }
     });
   }
 
-  f(c: string) { return this.form.get(c); }
+  private handleCreateError(err: any) {
+    let errorMessage = 'No se pudo crear el empleado.';
+    
+    if (err.status === 409) {
+      errorMessage = 'Ya existe un empleado con ese DNI o correo electrónico.';
+    } else if (err.status === 400) {
+      if (err.error?.errors) {
+        const validationErrors = err.error.errors;
+        const errorMessages = [];
+        
+        if (validationErrors.nombre) {
+          errorMessages.push(`Nombre: ${validationErrors.nombre.join(', ')}`);
+        }
+        if (validationErrors.apellido) {
+          errorMessages.push(`Apellido: ${validationErrors.apellido.join(', ')}`);
+        }
+        if (validationErrors.dni) {
+          errorMessages.push(`DNI: ${validationErrors.dni.join(', ')}`);
+        }
+        if (validationErrors.email) {
+          errorMessages.push(`Email: ${validationErrors.email.join(', ')}`);
+        }
+        
+        if (errorMessages.length > 0) {
+          errorMessage = `Errores de validación:\n${errorMessages.join('\n')}`;
+        }
+      }
+    } else if (err.error?.message) {
+      errorMessage = err.error.message;
+    }
+    
+    this.msg.add({ 
+      severity: 'error', 
+      summary: 'Error', 
+      detail: errorMessage,
+      life: 5000
+    });
+    this.saving = false;
+  }
+
+  f(c: string) { 
+    return this.form.get(c); 
+  }
 }

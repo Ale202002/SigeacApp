@@ -1,0 +1,1 @@
+export { WorkstationTableComponent } from './workstation-table.component';

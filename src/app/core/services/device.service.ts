@@ -3,11 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { Device, mapDeviceDto, mapDevicesDto } from '@core/interfaces/device.interface';
 import { DeviceCreateDto, DeviceDto, DeviceUpdateDto } from '@core/interfaces/Dtos/deviceDto.interface';
+import { environment } from '@core/config/environment';
 
 
 @Injectable({ providedIn: 'root' })
 export class DeviceService {
-  private readonly API_URL = 'https://localhost:44334/api/Equipos';
+  private readonly API_URL = `${environment.apiUrl}/Equipos`;
 
   constructor(private http: HttpClient) {}
 

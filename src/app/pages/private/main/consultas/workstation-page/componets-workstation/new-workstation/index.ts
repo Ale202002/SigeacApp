@@ -1,0 +1,1 @@
+export { NewWorkstationComponent } from './new-workstation.component';

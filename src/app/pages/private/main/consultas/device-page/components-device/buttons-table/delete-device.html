@@ -1,0 +1,17 @@
+<button type="button" 
+        class="p-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg transition-colors"
+        (click)="onDeleteClick()"
+        title="Dar de Baja Equipo">
+  <i class="fas fa-trash"></i>
+</button>
+
+<!-- Confirmation Dialog -->
+<app-confirmation-dialog
+  [visible]="showConfirmation"
+  title="Confirmar Eliminación"
+  [message]="'¿Está seguro que desea dar de baja el equipo ' + device.identificador + '?'"
+  confirmText="Dar de Baja"
+  cancelText="Cancelar"
+  (confirm)="onConfirmDelete()"
+  (cancel)="onCancelDelete()">
+</app-confirmation-dialog>

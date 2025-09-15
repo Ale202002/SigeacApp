@@ -1,1 +1,102 @@
-<p>new-workstation works!</p>,
+<p-toast></p-toast>
+
+<button
+  type="button"
+  (click)="open()"
+  class="bg-[#6CA6C1] hover:bg-[#5A93AF] text-white font-medium px-6 py-2 rounded transition disabled:opacity-50">
+  Nuevo Puesto
+</button>
+
+<div *ngIf="show" class="fixed inset-0 z-50 flex items-start justify-center pt-24 bg-black/30 backdrop-blur-sm">
+  <div class="bg-white w-full max-w-2xl rounded shadow-lg border relative px-8 py-6">
+    <h3 class="text-xl font-semibold mb-6">
+      Nuevo Puesto
+    </h3>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-5">
+      <!-- Primera fila: Puestos y Plantas -->
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium mb-1">Puestos</label>
+          <input type="text" formControlName="puesto"
+                 placeholder="Ej: SS-F1-01, PB-F2-01"
+                 class="w-full border rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#6CA6C1]"
+                 [class.border-red-500]="f('puesto')?.invalid && f('puesto')?.touched">
+          <p *ngIf="f('puesto')?.invalid && f('puesto')?.touched" class="text-red-500 text-xs mt-1">
+            El puesto es requerido (mínimo 3 caracteres).
+          </p>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium mb-1">Plantas</label>
+          <select formControlName="planta"
+                  class="w-full border rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#6CA6C1]"
+                  [class.border-red-500]="f('planta')?.invalid && f('planta')?.touched">
+            <option value="">Seleccionar planta</option>
+            <option *ngFor="let planta of plantasOptions" [value]="planta.value">
+              {{ planta.label }}
+            </option>
+          </select>
+          <p *ngIf="f('planta')?.invalid && f('planta')?.touched" class="text-red-500 text-xs mt-1">
+            Seleccione una planta.
+          </p>
+        </div>
+      </div>
+
+      <!-- Segunda fila: Empleados y Equipo -->
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium mb-1">Empleados</label>
+          <select formControlName="empleado"
+                  class="w-full border rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#6CA6C1]">
+            <option value="">Seleccionar empleado</option>
+            <option *ngFor="let empleado of empleadosOptions" [value]="empleado.value">
+              {{ empleado.label }}
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium mb-1">Equipo</label>
+          <select formControlName="equipo"
+                  class="w-full border rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#6CA6C1]">
+            <option value="">Seleccionar equipo</option>
+            <option *ngFor="let equipo of equiposOptions" [value]="equipo.value">
+              {{ equipo.label }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Tercera fila: Fecha -->
+      <div>
+        <label class="block text-sm font-medium mb-1">Fecha</label>
+        <input type="date" formControlName="fecha"
+               class="w-full border rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#6CA6C1]"
+               [class.border-red-500]="f('fecha')?.invalid && f('fecha')?.touched">
+        <p *ngIf="f('fecha')?.invalid && f('fecha')?.touched" class="text-red-500 text-xs mt-1">
+          Seleccione una fecha.
+        </p>
+      </div>
+
+      <!-- Botones -->
+      <div class="mt-6 flex flex-col gap-3">
+        <button type="submit"
+                [disabled]="form.invalid || saving"
+                class="w-full bg-[#6CA6C1] hover:bg-[#5A93AF] text-white font-semibold py-3 rounded transition disabled:opacity-50 disabled:cursor-not-allowed">
+          {{ saving ? 'Registrando...' : 'Registrar' }}
+        </button>
+        <button type="button"
+                (click)="close(); $event.stopPropagation()"
+                class="w-full bg-[#555555] hover:bg-[#444444] text-white font-semibold py-3 rounded transition"
+                [disabled]="saving">
+          Cancelar
+        </button>
+      </div>
+    </form>
+
+    <button type="button" (click)="close(); $event.stopPropagation()" class="absolute top-3 right-3 text-gray-500 hover:text-gray-700" [disabled]="saving">
+      <i class="pi pi-times text-lg"></i>
+    </button>
+  </div>
+</div>

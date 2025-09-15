@@ -1,0 +1,1 @@
+export { DevicePageComponent } from './device-page';

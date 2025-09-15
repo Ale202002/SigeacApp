@@ -20,7 +20,8 @@
       "@core/*": ["src/app/core/*"],
       "@pages/*": ["src/app/pages/*"],
       "@shared/*": ["src/app/pages/private/shared/*"],
-      "@app/*": ["src/app/*"]
+      "@app/*": ["src/app/*"],
+      "@config/*": ["src/app/core/config/*"]
     }
   },
   "angularCompilerOptions": {

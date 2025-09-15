@@ -23,7 +23,7 @@ export interface UserCreateDto {
 
 // DTO actualizar usuario (payload PUT/PATCH)
 export interface UserUpdateDto {
-  iD_Usuario: number;
+  iD_Usuario?: number; // Opcional porque va en la URL
   nombre?: string;
   apellido?: string;
   dni?: string;

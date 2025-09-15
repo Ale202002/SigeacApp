@@ -3,8 +3,10 @@ import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { CheckboxModule } from 'primeng/checkbox';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
+import { TooltipModule } from 'primeng/tooltip';
 import { FormsModule } from '@angular/forms';
 import { statusSeverity, statusLabel } from '@core/utils/status.helpers';
+import { EditButtonComponent, DeleteButtonComponent } from '../actions';
 
 export interface TableColumn {
   field: string;
@@ -21,7 +23,7 @@ export interface SelectableItem {
 @Component({
   selector: 'app-generic-table',
   standalone: true,
-  imports: [CommonModule, TableModule, CheckboxModule, PaginatorModule, FormsModule],
+  imports: [CommonModule, TableModule, CheckboxModule, PaginatorModule, TooltipModule, FormsModule, EditButtonComponent, DeleteButtonComponent],
   templateUrl: './generic-table.html'
 })
 export class GenericTable<T extends SelectableItem> {
@@ -32,6 +34,8 @@ export class GenericTable<T extends SelectableItem> {
   @Input() showCheckboxes = true;
   @Input() showActions = true;
   @Input() emptyMessage = 'No hay registros.';
+  @Input() editTooltip = 'Editar';
+  @Input() deleteTooltip = 'Eliminar';
   
   // Paginación
   @Input() paginate = true;

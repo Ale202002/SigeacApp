@@ -7,6 +7,7 @@ import { WorkStation } from '@core/interfaces/workstation.interface';
 export interface Employee {
   id: number;
   nombre: string;
+  dni: string;
   correo: string;
   puestoId: number | null;
   puestoUbicacion: string | null;
@@ -34,6 +35,7 @@ export function mapToEmployees(users: User[], puestos: WorkStation[]): Employee[
     return {
       id: u.id,
       nombre: `${u.nombre} ${u.apellido}`.trim(),
+      dni: u.dni,
       correo: u.email,
       puestoId: puesto?.id ?? null,
       puestoUbicacion: puesto?.ubicacion ?? null,

@@ -1,0 +1,122 @@
+<div class="mt-16 md:mt-20">
+  <p-toast></p-toast>
+
+  <div class="flex items-center justify-between mb-2 px-1">
+    <div>
+      <h2 class="text-2xl font-semibold text-gray-700">Equipos</h2>
+      <p class="text-xs text-gray-500 mt-1">{{ devices().length }} registros</p>
+    </div>
+    <!-- Botón Nuevo Equipo (temporal hasta implementar componente) -->
+    <button type="button" 
+            class="px-4 py-2 bg-[#6CA6C1] text-white rounded-lg hover:bg-[#5a8fa5] transition-colors">
+      Nuevo Equipo
+    </button>
+  </div>
+
+  <!-- Todos los filtros en una sola línea -->
+  <div class="flex gap-4 mb-12 justify-center items-center flex-wrap">
+    <!-- Filtros genéricos integrados -->
+    <div class="flex items-center" style="width:246px; height:48px;">
+      <span class="w-full relative">
+        <select
+          [(ngModel)]="selectedPlant"
+          (ngModelChange)="onPlantChange({target: {value: $event}})"
+          class="w-full border rounded-lg px-4 py-3 focus:outline-none"
+          style="width:246px; height:48px; line-height:32px; border-radius:0.5rem; border-color:#6C6C6C; border-width:2px; color:#555555AD;">
+          <option value="">Plantas</option>
+          <option *ngFor="let plant of store.plantas" [value]="plant.data">{{ plant.label }}</option>
+        </select>
+      </span>
+    </div>
+
+    <div class="flex items-center" style="width:246px; height:48px;">
+      <span class="w-full relative">
+        <select
+          [(ngModel)]="selectedStatus"
+          (ngModelChange)="onStatusChange({target: {value: $event}})"
+          class="w-full border rounded-lg px-4 py-3 focus:outline-none"
+          style="width:246px; height:48px; line-height:32px; border-radius:0.5rem; border-color:#6C6C6C; border-width:2px; color:#555555AD;">
+          <option value="">Estados</option>
+          <option *ngFor="let estado of store.estados" [value]="estado.data">{{ estado.label }}</option>
+        </select>
+      </span>
+    </div>
+
+    <div class="flex items-center" style="width:246px; height:48px;">
+      <span class="w-full relative">
+        <input
+          type="text"
+          [(ngModel)]="selectedSearch"
+          (ngModelChange)="onSearchChange({target: {value: $event}})"
+          placeholder="Buscar"
+          class="w-full border rounded-lg px-4 py-3 focus:outline-none"
+          style="width:246px; height:48px; line-height:32px; border-radius:0.5rem; border-color:#6C6C6C; border-width:2px; color:#555555AD;">
+      </span>
+    </div>
+
+    <!-- Filtros específicos de equipos -->
+    <div class="flex items-center" style="width:246px; height:48px;">
+      <span class="w-full relative">
+        <select
+          [(ngModel)]="selectedTipoEquipo"
+          (ngModelChange)="onTipoEquipoChange($event)"
+          class="w-full border rounded-lg px-4 py-3 focus:outline-none"
+          style="width:246px; height:48px; line-height:32px; border-radius:0.5rem; border-color:#6C6C6C; border-width:2px; color:#555555AD;">
+          <option value="">Tipo Equipo</option>
+          <option *ngFor="let tipo of tipoEquipoOptions" [value]="tipo.value">{{ tipo.label }}</option>
+        </select>
+      </span>
+    </div>
+    
+    <div class="flex items-center" style="width:246px; height:48px;">
+      <span class="w-full relative">
+        <select
+          [(ngModel)]="selectedComponente"
+          (ngModelChange)="onComponenteChange($event)"
+          class="w-full border rounded-lg px-4 py-3 focus:outline-none"
+          style="width:246px; height:48px; line-height:32px; border-radius:0.5rem; border-color:#6C6C6C; border-width:2px; color:#555555AD;">
+          <option value="">Componentes</option>
+          <option *ngFor="let comp of componenteOptions" [value]="comp.value">{{ comp.label }}</option>
+        </select>
+      </span>
+    </div>
+  </div>
+
+  <!-- Tabla usando GenericTable -->
+  <div class="flex justify-center px-8">
+    <div class="w-full max-w-7xl">
+      <app-generic-table
+        [items]="devices()"
+        [columns]="columns"
+        [loading]="store.loading()"
+        [allSelected]="store.allSelected()"
+        [paginate]="true"
+        [rows]="5"
+        [totalRecords]="devices().length"
+        [rowsPerPageOptions]="[5, 10, 25, 50]"
+        [showCheckboxes]="true"
+        [showActions]="true"
+        [emptyMessage]="'No hay equipos registrados.'"
+        [editTooltip]="'Editar equipo'"
+        [deleteTooltip]="'Eliminar equipo'"
+        (toggleAll)="onToggleAll($event)"
+        (rowToggle)="onRowToggle($event)"
+        (editItem)="onEditDevice($event)"
+        (deleteItem)="onDeleteDevice($event)"
+        (pageChange)="onPageChange($event)">
+      </app-generic-table>
+    </div>
+  </div>
+
+  <!-- Container para componentes dinámicos -->
+  <div #editContainer style="display: none;">
+    <app-edit-device-button 
+      [device]="dummyDevice" 
+      style="display: none;">
+    </app-edit-device-button>
+    <app-delete-device-button 
+      [device]="dummyDevice" 
+      style="display: none;">
+    </app-delete-device-button>
+  </div>
+</div>

@@ -1,0 +1,19 @@
+<app-delete-button 
+  [item]="employee"
+  [tooltip]="''"
+  [disabled]="false"
+  (delete)="openDeleteDialog()">
+</app-delete-button>
+
+<!-- Diálogo de confirmación para dar de baja empleado -->
+<app-confirmation-dialog
+  [visible]="showDeleteDialog"
+  title="Dar de Baja Empleado/a"
+  [message]="'¿Estás seguro/a que deseas dar de baja al empleado/a ' + (employee.nombre || '') + '?'"
+  confirmText="CONFIRMAR BAJA"
+  cancelText="Cancelar"
+  (confirm)="onConfirmDelete()"
+  (cancel)="onCancelDelete()">
+</app-confirmation-dialog>
+
+

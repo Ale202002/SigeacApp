@@ -12,6 +12,7 @@ export interface WorkStation {
   usuarioId: number | null;
   equipoId: number | null;
   searchIndex: string;
+  selected?: boolean;
 }
 
 export function mapWorkStationDto(dto: WorkStationDto): WorkStation {
@@ -25,7 +26,8 @@ export function mapWorkStationDto(dto: WorkStationDto): WorkStation {
     plant,
     usuarioId: dto.usuarioID,
     equipoId: dto.equipoID,
-    searchIndex
+    searchIndex,
+    selected: false
   };
 }
 
