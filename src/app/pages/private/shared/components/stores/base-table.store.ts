@@ -8,7 +8,7 @@ import { STATUS_OPTIONS, PLANT_OPTIONS } from '@core/constants/table-filters.con
 import { FilterOption } from '@core/constants/filter-options.const';
 import { applyBaseFilters, BaseFilter } from '@core/utils/generic-filter.utils';
 import { SearchableEntity } from '@core/utils/search.utils';
-import { resolvePlantFromCode } from '@core/constants/plant-prefix.map';
+
 import { SelectableItem } from '../generic-table/generic-table';
 
 // Interface que deben implementar los servicios CRUD
@@ -25,6 +25,11 @@ export interface CrudService<T, CreateDto, UpdateDto> {
 export interface BaseTableItem extends SelectableItem, SearchableEntity {
   status?: EntityStatus;
   plant?: Plant | null;
+}
+
+export interface PageChangeEvent{
+  page: number;
+  rows: number;
 }
 
 @Injectable()
@@ -106,7 +111,7 @@ export abstract class BaseTableStore<T extends BaseTableItem> {
   }
 
   // Métodos de paginación
-  onPageChange(event: any) {
+  onPageChange(event: PageChangeEvent) {
     this.currentPage.set(event.page);
     this.rowsPerPage.set(event.rows);
   }

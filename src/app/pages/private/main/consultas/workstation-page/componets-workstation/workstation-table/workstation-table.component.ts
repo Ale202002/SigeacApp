@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 // PrimeNG
@@ -19,6 +19,7 @@ import { DeleteWorkstationButtonComponent } from '../buttons-table/delete-workst
 
 // Store and Services
 import { WorkstationTableStore } from '../store/workstation-store';
+import { BaseFilter } from '@core/utils/generic-filter.utils';
 
 // Interfaces
 import { WorkStation } from '@core/interfaces/workstation.interface';
@@ -62,7 +63,7 @@ export class WorkstationTableComponent implements OnInit {
   }
 
   // Métodos para manejar filtros
-  onFiltersChange(filters: any): void {
+  onFiltersChange(filters: BaseFilter): void {
     this.store.setSearch(filters.search || '');
     this.store.setStatus(filters.status);
     this.store.setPlant(filters.plant);

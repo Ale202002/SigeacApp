@@ -4,6 +4,7 @@ import { MessageService } from 'primeng/api';
 import { DeviceService } from '@core/services/device.service';
 import { Device } from '@core/interfaces/device.interface';
 import { BaseTableStore } from '@shared/components/stores/base-table.store';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable()
 export class DeviceTableStore extends BaseTableStore<Device> {
@@ -43,7 +44,7 @@ export class DeviceTableStore extends BaseTableStore<Device> {
         this.updateBaseItems(devices);
         this.loading.set(false);
       },
-      error: (error: any) => {
+      error: (error: HttpErrorResponse) => {
         this.loading.set(false);
         this.error.set('Error cargando equipos');
         this.msg.add({ 
@@ -69,7 +70,7 @@ export class DeviceTableStore extends BaseTableStore<Device> {
         });
         this.load(); // Recargar la lista
       },
-      error: (error: any) => {
+      error: (error: HttpErrorResponse) => {
         this.msg.add({
           severity: 'error',
           summary: 'Error',

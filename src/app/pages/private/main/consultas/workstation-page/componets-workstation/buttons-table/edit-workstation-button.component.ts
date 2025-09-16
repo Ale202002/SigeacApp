@@ -13,8 +13,8 @@ import { WorkStationUpdateDto } from '@core/interfaces/Dtos/workstationDto.inter
 import { User } from '@core/interfaces/user.interface';
 import { Device } from '@core/interfaces/device.interface';
 import { EntityStatus } from '@core/enums/options-enums/EntityStatus.enum';
-import { buildSearchIndex } from '@core/utils/search.utils';
 import { EditButtonComponent } from '@pages/private/shared/components/actions/edit-button/edit-button.component';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-edit-workstation-button',
@@ -122,7 +122,7 @@ export class EditWorkstationButtonComponent implements OnInit {
   }
 
   private updateWorkstation() {
-    const { ubicacion, planta, empleado, equipo, fecha, estado } = this.form.value;
+    const { ubicacion, empleado, equipo, estado } = this.form.value;
 
     const payload: WorkStationUpdateDto = {
       iD_Puesto: this.workstation.id,
@@ -150,48 +150,48 @@ export class EditWorkstationButtonComponent implements OnInit {
     });
   }
 
-  private handleUpdateError(err: any) {
-    let errorMessage = 'No se pudo actualizar el puesto de trabajo.';
-    
-    if (err.status === 404) {
-      errorMessage = 'Puesto de trabajo no encontrado.';
-    } else if (err.status === 400) {
-      if (err.error?.errors) {
-        const validationErrors = err.error.errors;
-        const errorMessages = [];
-        
-        if (validationErrors.ubicacion) {
-          errorMessages.push(`Ubicación: ${validationErrors.ubicacion.join(', ')}`);
-        }
-        if (validationErrors.estado) {
-          errorMessages.push(`Estado: ${validationErrors.estado.join(', ')}`);
-        }
-        if (validationErrors.iD_Puesto) {
-          errorMessages.push(`ID Puesto: ${validationErrors.iD_Puesto.join(', ')}`);
-        }
-        
-        if (errorMessages.length > 0) {
-          errorMessage = `Errores de validación:\n${errorMessages.join('\n')}`;
-        } else {
-          errorMessage = 'Datos inválidos. Verifique la información ingresada.';
-        }
+  private handleUpdateError(err: HttpErrorResponse) {
+  let errorMessage = 'No se pudo actualizar el puesto de trabajo.';
+
+  if (err.status === 404) {
+    errorMessage = 'Puesto de trabajo no encontrado.';
+  } else if (err.status === 400) {
+    if (err.error?.errors) {
+      const validationErrors = err.error.errors;
+      const errorMessages = [];
+
+      if (validationErrors.ubicacion) {
+        errorMessages.push(`Ubicación: ${validationErrors.ubicacion.join(', ')}`);
+      }
+      if (validationErrors.estado) {
+        errorMessages.push(`Estado: ${validationErrors.estado.join(', ')}`);
+      }
+      if (validationErrors.iD_Puesto) {
+        errorMessages.push(`ID Puesto: ${validationErrors.iD_Puesto.join(', ')}`);
+      }
+
+      if (errorMessages.length > 0) {
+        errorMessage = `Errores de validación:\n${errorMessages.join('\n')}`;
       } else {
         errorMessage = 'Datos inválidos. Verifique la información ingresada.';
       }
-    } else if (err.status === 409) {
-      errorMessage = 'Ya existe un puesto con esa ubicación.';
-    } else if (err.error?.message) {
-      errorMessage = err.error.message;
+    } else {
+      errorMessage = 'Datos inválidos. Verifique la información ingresada.';
     }
-    
-    this.msg.add({ 
-      severity: 'error', 
-      summary: 'Error al actualizar', 
-      detail: errorMessage,
-      life: 7000
-    });
-    this.saving.set(false);
+  } else if (err.status === 409) {
+    errorMessage = 'Ya existe un puesto con esa ubicación.';
+  } else if (err.error?.message) {
+    errorMessage = err.error.message;
   }
+
+  this.msg.add({ 
+    severity: 'error', 
+    summary: 'Error al actualizar', 
+    detail: errorMessage,
+    life: 7000
+  });
+  this.saving.set(false);
+}
 
   f(controlName: string) { 
     return this.form.get(controlName); 

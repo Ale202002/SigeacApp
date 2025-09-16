@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
-import { Observable, forkJoin } from 'rxjs';
+
 import { MessageService } from 'primeng/api';
 
 import { WorkStationService } from '@core/services/workstation.service';
-import { UserService } from '@core/services/user.service';
+
 import { WorkStation } from '@core/interfaces/workstation.interface';
-import { User } from '@core/interfaces/user.interface';
-import { WorkStationCreateDto, WorkStationUpdateDto } from '@core/interfaces/Dtos/workstationDto.interface';
-import { EntityStatus } from '@core/enums/options-enums/EntityStatus.enum';
+
 
 import { BaseTableStore } from '@shared/components/stores/base-table.store';
+import { HttpErrorResponse } from '@angular/common/http';
+
 
 @Injectable()
 export class WorkstationTableStore extends BaseTableStore<WorkStation> {
@@ -47,6 +47,7 @@ export class WorkstationTableStore extends BaseTableStore<WorkStation> {
   addWorkstation(workstation: WorkStation) {
     // console.log('Agregando puesto al store:', workstation);
     // Refrescamos la lista completa para asegurar sincronización
+    void workstation; // Evita warning de variable no usada
     this.load();
   }
 
@@ -74,12 +75,12 @@ export class WorkstationTableStore extends BaseTableStore<WorkStation> {
           detail: 'El puesto de trabajo ha sido eliminado exitosamente' 
         });
       },
-      error: (error: any) => {
+      error: (error: HttpErrorResponse) => {
         this.loading.set(false);
         console.error('Error al eliminar puesto:', error);
-        
+
         let errorMessage = 'No se pudo eliminar el puesto de trabajo.';
-        
+
         if (error.status === 500) {
           if (error.error && typeof error.error === 'string' && 
               error.error.includes('REFERENCE constraint')) {
@@ -91,15 +92,12 @@ export class WorkstationTableStore extends BaseTableStore<WorkStation> {
           errorMessage = 'Puesto de trabajo no encontrado.';
         } else if (error.status === 400) {
           errorMessage = 'Solicitud inválida.';
-        } else if (error.status === 0) {
-          errorMessage = 'No se pudo conectar con el servidor.';
-        } else if (error.error?.message) {
-          errorMessage = error.error.message;
         }
-        
-        this.msg.add({ 
-          severity: 'error', 
-          summary: 'Error al eliminar puesto', 
+        // ...otros casos según tu lógica
+
+        this.msg.add({
+          severity: 'error',
+          summary: 'Error al eliminar',
           detail: errorMessage,
           life: 7000
         });
